@@ -25,22 +25,57 @@ class LineFrame(Frame): #Klasa linijka dziedzicz¹ca po klasie obraz
                 Word.append(char)
 
     def findChar(self, position, spaceLength):
-        leer=0
-        dlugo=0
+        leer=0 # int, licznik pustych kolumn
+        Queue=[] #kolejka, bedzie s³uzyæ do wyszukiwania i przechowywania s¹siadów
+        PiksList=[] #lista bedzie zawirea³a wynikow¹ liste pikseli.
+        
         #tu trzeba sie dopytaæ Grzesia o funkcje zwracaj¹ce wielkoœæ obiektu
         #tj. wysokoœci i szerokoœci i dopisaæ to ni¿ej
-        while (position < dlugo and self.hLineHistogram(position)==0):
+        
+        while (position < Length and self.hLineHistogram(position)==0):
             position+=1
             leer+=1
-        if position == dlugosclini: # sprawdamy czy nie mamy przypadkiem do czynienia ze spacja lub enterem
+        if position == length: # sprawdamy czy nie mamy przypadkiem do czynienia ze spacja lub enterem
             return position, "Enter"
         elif leer>=spaceLength:
             return position, "Space"
         else:
-            pass
+            for i in range(0, wysokosc-1): #wpisujemy wszystkie piksele z pierwszej czarnej linijki do kolejki
+                if self.getPiksel(positon, i)==1: #sprawdziæ czy na pewno taka kolejnoœæ wspó³¿êdnych
+                    Queue.append((position, i))
+                    PiksList.append((position, i))
+            while len(Queue)>0:
+                Piksel=Queue.pop(0) #krotka zawieraj¹ca wspó³rzêdne piksela
+                neighbourhood=[(Piksel[0]-1, Piksel[1]+1),(Piksel[0]-1, Piksel[1]),(Piksel[0]-1, Piksel[1]-1),(Piksel[0], Piksel[1]+1),(Piksel[0], Piksel[1]-1),(Piksel[0]+1, Piksel[1]+1),(Piksel[0]+1, Piksel[1]),(Piksel[0]+1, Piksel[1]-1)]
+                #to co wyzej to lista wspó³rzêdnych s¹siadów Piksela
+                for neighbour in neighbourhood: #sprawdzamy s¹siedztwo
+                    if not(neighbour in PiksList) and self.getPiksel(neighbour[0],neighbour[1])==1:
+                        Queue.append(neighbour)
+                        PiksList.append(neighbour)
+            PiksList.sort() # soruje liste w ten sposób, ¿e najpierw piksele z pierwszej kolumny potem z drugiej itd
+            PiksList=self.addHigherPiks(PiksList) #dodajemy wszystkie piksele nad grup¹
+            
 
-def findSpaceLength(Histogram): #znajduje d³ugoœæ spacji
+            
+#pisze t¹ metode bo chyba mi sie przyda, a nie ma jej w projekcie.
+#ma ona za zadanie dodaæ do PiksList piksele nad tymi ju¿ wybranymi
+#na razie zak³adam ¿e najwy¿szy wiersz ma numer 0, dopuki mi Grzeœ nie odpisze
+    def addHigherPiks(PiksList):
+        position1,High1=PiksList[0]
+        position2,High2=PiksList[len(PiksList)-1]
+        for kol in range(position1, position2):
+            line=0
+            while ((kol, line) in PiksList):
+                if self.getPiksel(kol,line):
+                    PiksList.append((kol,line))
+                line+=1
+        PiksList.sort()
+        return PiksList
+                
+                            
+def findSpaceLength(Histogram, High): #znajduje d³ugoœæ spacji
     pass
+
 
 
         
