@@ -84,7 +84,7 @@ class Frame :
             pass
     
     def leftCut(self) :
-        """method docstring"""
+        """Cuts the image from the left to the beginning of text"""
         l_cut_point=0
         for i in range(self.matrix.size[0]-1):
                 if self.hLineHistogram(i) >= 5: #0.001*self.matrix.size[1]:
@@ -94,7 +94,7 @@ class Frame :
         pass
 
     def vCut(self):
-        """method docstring"""
+        """Cuts the sides of the image to the text borders"""
         self.leftCut()
         self.matrix=self.matrix.rotate(180)
         self.leftCut()
@@ -102,7 +102,7 @@ class Frame :
         pass
     
     def upperCut (self) :
-            """method docstring"""
+            """Cuts the image from the upper side to the beginning of text"""
             u_cut_point=0
             for i in range(self.matrix.size[1]-1):
                 if self.hLineHistogram(i) >= 5: #0.01*self.matrix.size[0]:
@@ -111,6 +111,7 @@ class Frame :
             self.matrix=self.matrix.crop((0,u_cutpoint,self.matrix.size[0],self.matrix.size[1]))
             pass
     def hCut(self) :
+        """Cuts the image from the upper side to the beginning of text"""
         self.upperCut()
         self.matrix=self.matrix.rotate(180)
         self.upperCut()
@@ -150,6 +151,11 @@ class Frame :
             return v_change_histogram
             pass
 
+    def getSize(self):
+        width, high = self.matrix.size()
+        return width, high
+
+    
 ##########        test methods            ##########
 
         
@@ -164,3 +170,4 @@ class Frame :
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
 
+    pass

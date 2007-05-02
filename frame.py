@@ -151,6 +151,11 @@ class Frame :
             return v_change_histogram
             pass
 
+    def getSize(self):
+        width, high = self.matrix.size()
+        return width, high
+
+    
 ##########        test methods            ##########
 
         

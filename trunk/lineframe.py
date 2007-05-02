@@ -2,8 +2,9 @@
 """Module docstring"""
 
 import cPickle
-import Image
+import Image, ImageEnhance
 from frame import Frame
+from charframe import CharFrame
 from neuralnetwork import NeuralNetwork
 
 
@@ -33,11 +34,9 @@ class LineFrame(Frame) :
         leer=0 # int, licznik pustych kolumn
         Queue=[] #kolejka, bedzie słuzyć do wyszukiwania i przechowywania sąsiadów
         PiksList=[] #lista bedzie zawireała wynikową liste pikseli.
+        length, high = self.getSize()
         
-        #tu trzeba sie dopytać Grzesia o funkcje zwracające wielkość obiektu
-        #tj. wysokości i szerokości i dopisać to niżej
-        
-        while (position < length and self.hLineHistogram(position,high)==0):
+        while (position < length and self.hLineHistogram(position,high)==255):
             position+=1
             leer+=1
         if position == length: # sprawdamy czy nie mamy przypadkiem do czynienia ze spacja lub enterem
@@ -45,7 +44,7 @@ class LineFrame(Frame) :
         elif leer>=spaceLength:
             return position, "Space", 0
         else:
-            for i in range(0,High-1): #wpisujemy wszystkie piksele z pierwszej czarnej linijki do kolejki
+            for i in range(0,high-1): #wpisujemy wszystkie piksele z pierwszej czarnej linijki do kolejki
                 if self.getPiksel(positon, i)==1: #sprawdzić czy na pewno taka kolejność współżędnych
                     Queue.append((position, i))
                     PiksList.append((position, i))
@@ -56,7 +55,7 @@ class LineFrame(Frame) :
                 #to co wyzej to lista współrzędnych sąsiadów Piksela
 
                 for neighbour in neighbourhood: #sprawdzamy sąsiedztwo
-                    if not(neighbour in PiksList) and self.getPiksel(neighbour[0],neighbour[1])==1:
+                    if not(neighbour in PiksList) and self.getPiksel(neighbour[0],neighbour[1])==0:
                         Queue.append(neighbour)
                         PiksList.append(neighbour)
                         
@@ -97,7 +96,7 @@ class LineFrame(Frame) :
         for kol in range(position1, position2): #dla każedj kolumnt sprawdzamy piksele nad znalezionymi
             line=0
             while ((kol, line) in PiksList):
-                if self.getPiksel(kol,line): #jeżeli czarne, to dodajemy je do listy
+                if self.getPiksel(kol,line)==0: #jeżeli czarne, to dodajemy je do listy
                     PiksList.append((kol,line))
                 line+=1
         PiksList.sort()# na koniec sortujemy liste ponownie by miała taki sam format jak na wejsciu, przyda sie to zaraz w findChar
@@ -158,5 +157,6 @@ def findSpaceLength(Histogram, High): #znajduje długość spacji
     
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-	pass
+
+	
 	
