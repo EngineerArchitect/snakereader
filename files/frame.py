@@ -155,7 +155,10 @@ class Frame :
         width, high = self.matrix.size()
         return width, high
 
-    
+    def makeWhite(self, x, y) :
+        self.matrix.putpixel((x,y),255)
+
+        
 ##########        test methods            ##########
 
         
