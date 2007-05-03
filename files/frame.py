@@ -7,7 +7,7 @@ import Image, ImageEnhance
 class Frame :
     """Class docstring"""
     
-    def __init__(self) :
+    def __init__(self,f) :
             self.matrix=Image.open(f)
             pass
     def putPixel (self, x, y) :
@@ -152,8 +152,8 @@ class Frame :
             pass
 
     def getSize(self):
-        width, high = self.matrix.size()
-        return width, high
+        return self.matrix.size
+        return width,high
 
     def makeWhite(self, x, y) :
         self.matrix.putpixel((x,y),255)
@@ -165,7 +165,7 @@ class Frame :
     def showPicture(self) :
             self.matrix.show()
             
-    def savePicture(filename,format):
+    def savePicture(self,filename,format):
             """dodałem ją, gdyż do testów będzie bardzo potrzebna, a jej implementacja nie powinna Ci nastręczyć trudnosci"""
             self.matrix.save(filename,format)
 		
