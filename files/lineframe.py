@@ -30,7 +30,6 @@ class LineFrame(Frame) :
                     return Line
             else: # zwrócono obiekt typu znak
                 Word.append(char)
-            print position
                 
     def findChar(self, position, spaceLength, ): 
         leer=0 # int, licznik pustych kolumn
@@ -70,7 +69,7 @@ class LineFrame(Frame) :
             if charLength<=high: #sprawdzamy czy nie wykryliśmy sklejki dłuższej niż długość kafelki
                 newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
                 Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać
-                
+
                 for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
                     Char.putPixel(el[0]-position1,el[1])
                     self.makeWhite(el[0],el[1])
@@ -81,6 +80,7 @@ class LineFrame(Frame) :
 
             else: #czyli gdy wykryto za długą sklejke
                 PiksList, Char = reconChar(PiksList,high)
+                print "to long"
                 for Piks in PiksList:
                     self.makeWhite(Piks[0],Piks[1])
                 position1,High1=PiksList[0]
@@ -100,7 +100,7 @@ class LineFrame(Frame) :
         position2,High2=PiksList[len(PiksList)-1]
         for kol in range(position1, position2): #dla każedj kolumny sprawdzamy piksele nad znalezionymi
             line=0
-            while ((kol, line) in PiksList):
+            while not((kol, line) in PiksList):
                 if self.getPixel(kol,line)==0: #jeżeli czarne, to dodajemy je do listy
                     PiksList.append((kol,line))
                 line+=1
@@ -123,7 +123,6 @@ def reconChar(PiksList, high):
     Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać      
     for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
         Char.putPixel(el[0]-position,el[1])
-
     CharScaled=Char
     CharScaled.reScale(20,20)
     return PiksList, CharScaled
@@ -174,6 +173,4 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 	kafels=Image.extractCharacters()
 	for i in range(0,len(kafels)):
             for j in range(0, len(kafels[i])):
-                print kafels[i][j]
-                print str(i)+" "+str(j)
                 kafels[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
