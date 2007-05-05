@@ -7,9 +7,10 @@ class NeuralNetwork :
 	def __init__(self,K,M,N,offList=[],alfamatrix='rnd',betamatrix='rnd',beta=0.5,eta=0.3):
 		"""Creates the neural network with the followin parameters: K,M,N,  (optional:) offList,,alfamatrix,,betamatrix,beta,eta
 		K - number of inputs, M - number of neurons in the first layer; K - neurons in second layer, offList  - links that are eliminated from the web;
-		Optional parameters: alfamatrix - matrix (M x K) of factors of the first layer, in the columns there are factors of the particular neuron, if not given, will be randomly generated; betamatrix - the same (N x M); beta - factor of the activation function (logistic function); eta is the step of learning""" 
-		if alfamatrix=='rnd': alfamatrix=array([self.__rand(M) for i in range(K+1)]) ##generation of the alfamatrix
+		Optional parameters: alfamatrix - matrix (M x K) of factors of the first layer, in the columns there are factors of the particular neuron, if not given, will be randomly generated, you can also specify filename instead of this parameter (then you won't specify the betamatrix, because it also will be loaded); betamatrix - the same (N x M); beta - factor of the activation function (logistic function); eta is the step of learning""" 
+		if alfamatrix=='rnd': alfamatrix=array([self.__rand(M) for i in range(K+1)]) ##random generation of the alfamatrix
 		if betamatrix=='rnd':	betamatrix=array([self.__rand(N) for i in range(M)])## the same for betamatrix
+		else if type(alfamatrix)!=type(array([1,1])): alfamatrix,betamatrix=self.loadFactors(alfamatrix) ##random generation of the alfamatrix
 		self.beta,self.alfamatrix,self.betamatrix,self.K,self.M, self.N,self.eta,self.offList=beta,array(alfamatrix),array(betamatrix),K+1,M,N,eta,offList ##parameters assigment
 		for i,j in self.offList: self.betamatrix[i,j]=0 ##turning down some links
 	def __rand(self,n): return [random.random()*5 for i in range(n)] ##generates random sequence (list)
@@ -29,18 +30,14 @@ class NeuralNetwork :
 		self.Z=array([self.activationFunction(i2) for i2 in matrixmultiply(self.Y, self.betamatrix)])##the same for the second layer
 		return self.Z
 	def learn (self, inputVector, outputVector) :
-		"""learning of the network"""
+		"""learning of the network, you have to to run this function more than 100 times to see the results"""
 		self.inputVector=list(inputVector)
 		self.inputVector.insert(0,2)
 		self.inputVector=array(self.inputVector) ## as in getOutput function inserts one into the inputVector
 		delta=outputVector-self.getOutput(inputVector) ##creates error vector for the output layer, here we use the inputVector (not the self.inputVector) because one will be added by the getOutput function
 		epsilon=array([sum(array([self.betamatrix[m,n]*delta[n] for n in range(0,self.N)]))for m in range(0,self.M)])##creates error vector for the first layer (backpropagation)
-		for n in range(self.N):
-			for m in range(self.M):
-				self.betamatrix[m,n]+=float(self.eta*delta[n]*self.Z[n]*(1-self.Z[n])*self.Y[m])##changing the output layer factors
-		for m in range(self.M):
-			for k in range(self.K):
-				self.alfamatrix[k,m]+=float(self.eta*epsilon[m]*self.Y[m]*(1-self.Y[m])*self.inputVector[k]) ##the same for the first layer
+		self.betamatrix=array([[self.betamatrix[m,n]+float(self.eta*delta[n]*self.Z[n]*(1-self.Z[n])*self.Y[m]) for n in range(self.N)] for m in range(self.M)])##changing the output layer factors
+		self.alfamatrix=array([[self.alfamatrix[k,m]+float(self.eta*epsilon[m]*self.Y[m]*(1-self.Y[m])*self.inputVector[k]) for m in range(self.M)] for k in range(self.K)])  ##the same for the first layer
 		for i,j in self.offList: self.betamatrix[i,j]=0
 		
 ###########################################################33
