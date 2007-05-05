@@ -10,7 +10,8 @@ class NeuralNetwork :
 		Optional parameters: alfamatrix - matrix (M x K) of factors of the first layer, in the columns there are factors of the particular neuron, if not given, will be randomly generated, you can also specify filename instead of this parameter (then you won't specify the betamatrix, because it also will be loaded); betamatrix - the same (N x M); beta - factor of the activation function (logistic function); eta is the step of learning""" 
 		if alfamatrix=='rnd': alfamatrix=array([self.__rand(M) for i in range(K+1)]) ##random generation of the alfamatrix
 		if betamatrix=='rnd':	betamatrix=array([self.__rand(N) for i in range(M)])## the same for betamatrix
-		else if type(alfamatrix)!=type(array([1,1])): alfamatrix,betamatrix=self.loadFactors(alfamatrix) ##random generation of the alfamatrix
+		else: 
+			if type(alfamatrix)!=type(array([1,1])): alfamatrix,betamatrix=self.loadFactors(alfamatrix) ##random generation of the alfamatrix
 		self.beta,self.alfamatrix,self.betamatrix,self.K,self.M, self.N,self.eta,self.offList=beta,array(alfamatrix),array(betamatrix),K+1,M,N,eta,offList ##parameters assigment
 		for i,j in self.offList: self.betamatrix[i,j]=0 ##turning down some links
 	def __rand(self,n): return [random.random()*5 for i in range(n)] ##generates random sequence (list)
@@ -47,8 +48,8 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 	def f(n,x): return x%2+(1/n)
 	def g(n,x): return ((x+1)%2)
 	
-	neur=NeuralNetwork(10,20,4)
-	for n in range(1,30000):
+	neur=NeuralNetwork(10,20,4,[(1,1),(2,2),(3,3)])
+	for n in range(1,5000):
 		l=[f(n,float(x)) for x in range(2,12)]
 		l2=[g(n,float(x)) for x in range(2,12)]
 		l3=array([1 for x in range(5)]+[0 for x in range(5)])+1/n
