@@ -1,9 +1,9 @@
 # -*- coding: utf8 -*-
 """Module docstring"""
-##from blockframe import BlockFrame
-##from lineframe import LineFrame
-##from charframe import CharFrame
-##from dictionary import Dictionary
+from blockframe import *
+from lineframe import *
+from charframe import *
+from dictionary import *
 class Control:
     def __init__(self):
         optionFile=open('options.ini','r')
