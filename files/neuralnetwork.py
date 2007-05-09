@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 """Neural network implementation for Python, uses logistic function as an activation function. Creates simple two layers neural network, which can be used f. e. to text recognition"""
-from Numeric import *
+from numpy.oldnumeric  import *
 import random,math
 class NeuralNetwork :	
 	"""Neural network with learning based on backpropagation algorithm"""
