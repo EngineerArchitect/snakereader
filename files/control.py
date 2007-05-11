@@ -5,7 +5,7 @@ from lineframe import *
 from charframe import *
 from dictionary import *
 class Control:
-    def __init__(self):
+    def __init__(self): # jeszcze bez szukania slownikow
         optionFile=open('options.ini','r')
         optionList=optionFile.readlines()
         optionFile.close()
@@ -21,32 +21,39 @@ class Control:
         print optionList
         optionFile.writelines(optionList)
         optionFile.close()
-    def changeOption(self):
-        """method docstring"""
-        # returns 
-        pass
     def inputFile(self,filename):
         """method docstring"""
         picture=open(filename,'rb')
         return picture
         pass
-    def textRecognition(self):
+    def textRecognition(self,pic): # jeszcze bez wyjatkow
         """method docstring"""
-        # returns 
-        pass
-    def blockSegmentation(self,BlockFrame):
+        text=""
+        # try?
+        mainList=self.blockSegmentation(pic,[self.options[0],self.options[1]])
+        # except?
+        for line in mainList:
+            mainList[mainList.index(line)]=self.characterSegmentation(line,[])
+            for word in line:
+                wordRead=[]
+                for char in word:
+                    wordRead.append(self.characterRecognition(char,[]))
+                text+=self.textComposition(wordRead,[self.options[2]])+' '
+            text+='\n'
+        return text
+    def blockSegmentation(self,BlockFrame,listOfOptions):
         """methot docstring"""
         # returns 
         pass
-    def characterSegmentation(self,LineFrame):
+    def characterSegmentation(self,LineFrame,listOfOptions):
         """method docstring"""
         # returns 
         pass
-    def characterRecognition (self,CharFrame):
+    def characterRecognition (self,CharFrame,listOfOptions):
         """recognition of one character given as an CharFrame object, returns a string"""
         # returns 
         pass
-    def textComposition(self,word):
+    def textComposition(self,tupleList,listOfOptions):
         """method docstring"""
         # returns 
         pass
