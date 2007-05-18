@@ -91,6 +91,7 @@ class Frame :
                     l_cutpoint = i
                     break
         self.matrix=self.matrix.crop((l_cutpoint,0,self.matrix.size[0],self.matrix.size[1]))
+        return self
         pass
 
     def vCut(self):
@@ -98,7 +99,8 @@ class Frame :
         self.leftCut()
         self.matrix=self.matrix.rotate(180)
         self.leftCut()
-        self.matrix=self.matrix.rotate(180)           
+        self.matrix=self.matrix.rotate(180)
+        return self
         pass
     
     def upperCut (self) :
@@ -115,7 +117,8 @@ class Frame :
         self.upperCut()
         self.matrix=self.matrix.rotate(180)
         self.upperCut()
-        self.matrix=self.matrix.rotate(180)           
+        self.matrix=self.matrix.rotate(180)
+        return self
         pass
     
     def hLineChangeHistogram (self, number) :
@@ -172,5 +175,13 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-
+    f=open("200digram2.jpg",'rb')
+    im=Frame(f)
+    im.blackWhite()
+    im.clear()
+    print im.getSize()
+    im=im.hCut()
+    im=im.leftCut()
+    print im.getSize()
+    im.showPicture()
     pass
