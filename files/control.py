@@ -50,9 +50,11 @@ class Control:
         # ta metoda zwraca liste linijek w postaci obiektow LineFrame
         pass
     def characterSegmentation(self,LineFrame,listOfOptions):
-        """method docstring"""
-        # zwracasz liste list obiektow CharFrame
-        pass
+        """segmentation of text line, returns list of lists of CharFrame objects """
+
+        characters = LineFrame.extractCharacters()
+        return characters
+        
     def characterRecognition (self,CharFrame,listOfOptions):
         """recognition of one character given as an CharFrame object, returns a string"""
         # zwracasz liste krotek postaci (litera,prawdopodobienstwo)
