@@ -9,7 +9,7 @@ class Control:
         optionFile=open('options.ini','r')
         optionList=optionFile.readlines()
         optionFile.close()
-        self.options=[int(opt[opt.index('=')+1:]) for opt in optionList]
+        self.options=[opt[opt.index('=')+1:].strip() for opt in optionList]
     def saveOptions(self):
         """method docstring"""
         optionFile=open('options.ini','r')
@@ -25,39 +25,44 @@ class Control:
         """method docstring"""
         picture=open(filename,'rb')
         return picture
-        pass
     def textRecognition(self,pic): # jeszcze bez wyjatkow
         """method docstring"""
         text=""
         # try?
-        mainList=self.blockSegmentation(pic,[self.options[0],self.options[1]])
+        mainList=self.blockSegmentation(pic,[self.options[1],self.options[2]])
         # except?
+        # PAWEL!!!!! usedDictionary=          tworzenie obiektu klasy Dictionary na wybranym slowniku (czyli self.options[0])
+        usedDictionary=""
+##        import pdb
+##        pdb.set_trace()
         for line in mainList:
-            mainList[mainList.index(line)]=self.characterSegmentation(line,[])
-            for word in line:
+            for word in self.characterSegmentation(line,[]):
                 wordRead=[]
                 for char in word:
                     wordRead.append(self.characterRecognition(char,[]))
-                text+=self.textComposition(wordRead,[self.options[2]])+' '
+                text+=self.textComposition(wordRead,usedDictionary)+' '
             text+='\n'
         return text
-    def blockSegmentation(self,BlockFrame,listOfOptions):
+    def blockSegmentation(self,picture,listOfOptions):
         """methot docstring"""
-        # returns 
+        # picture to obrazek wczytany binarnie do zmiennej
+        # listOfOptions to lista opcji, narazie to [wielkosc czcionki, rozdzielczosc skanu]
+        # ta metoda zwraca liste linijek w postaci obiektow LineFrame
         pass
     def characterSegmentation(self,LineFrame,listOfOptions):
         """method docstring"""
-        # returns 
+        # zwracasz liste list obiektow CharFrame
         pass
     def characterRecognition (self,CharFrame,listOfOptions):
         """recognition of one character given as an CharFrame object, returns a string"""
-        # returns 
+        # zwracasz liste krotek postaci (litera,prawdopodobienstwo)
         pass
-    def textComposition(self,tupleList,listOfOptions):
+    def textComposition(self,tupleListList,dictionaryObject):
         """method docstring"""
-        # returns 
-        pass
-		
+        # na poczatku metody textRecognition stworz sobie obiekt klasy Dictionary
+        # zeby pozniej, w tej metodzie (ktora ma jako argument ten wlasnie obiekt - dictionaryObject)
+        # z niego korzystac a nie za kazdym razem tworzyc nowy obiekt
+        # ta metoda na wejsciu ma liste list ktorek, a zwraca slowo		
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
     a=Control()
     a.saveOptions()
