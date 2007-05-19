@@ -11,7 +11,7 @@ from neuralnetwork import NeuralNetwork
 class LineFrame(Frame) :
     def __init__(self,f=None,new=False) :
         if new:
-            self.matrix=Image.new('1',(5000,5000))
+            self.matrix=Image.new('1',(1,1))
         else:
             self.matrix=Image.open(f)
         pass

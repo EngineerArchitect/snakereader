@@ -44,10 +44,14 @@ class Control:
             text+='\n'
         return text
     def blockSegmentation(self,picture,listOfOptions):
-        """methot docstring"""
+        """segmentation of a block of text into list of lines given as LineFrame objects"""
+        
         # picture to obrazek wczytany binarnie do zmiennej
         # listOfOptions to lista opcji, narazie to [wielkosc czcionki, rozdzielczosc skanu]
         # ta metoda zwraca liste linijek w postaci obiektow LineFrame
+        block=blockFrame(picture)
+        lines=block.extractLines()
+        return lines
         pass
     def characterSegmentation(self,LineFrame,listOfOptions):
         """segmentation of text line, returns list of lists of CharFrame objects """
