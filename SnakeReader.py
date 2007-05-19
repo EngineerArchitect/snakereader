@@ -20,15 +20,6 @@ class CommandLine(Control) :
             if sys.argv[i] == '-r':
                 self.options[2] = sys.argv[i+1]
 
-sys.argv.append("a1.jpg")
-sys.argv.append("a2.txt")
-sys.argv.append("-d")
-sys.argv.append("asfadf.txt")
-sys.argv.append("-s")
-sys.argv.append("10")
-sys.argv.append("-r")
-sys.argv.append("12341231")
-print sys.argv
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()
