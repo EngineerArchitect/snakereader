@@ -15,11 +15,13 @@ class BlockFrame(Frame) :
           self.upperCut()
           cutpoint=0
           for i in range (self.matrix.size[1]):
-               if self.hLineHistogram(i)>9:
+               if self.hLineHistogram(i)>5:
                     cutpoint+=1
                else:
                     break
-          line=LineFrame("200digram2.jpg")
+
+          line=LineFrame(new=True)
+          line.matrix.show()
           line.matrix=self.matrix.crop((0,0,self.matrix.size[0],cutpoint))
           self.matrix = self.matrix.crop((0,cutpoint,self.matrix.size[0],self.matrix.size[1]))
           return line
@@ -32,12 +34,13 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("200digram2.jpg",'rb')
+     f=open("200digram1.jpg",'rb')
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
-     im.extractLine().showPicture()
-     
-     
-     im.showPicture()
+     l=im.extractLine()
+     l.showPicture()
+##     
+##     
+##     im.showPicture()
      pass
