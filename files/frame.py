@@ -7,8 +7,11 @@ import Image, ImageEnhance
 class Frame :
     """Class docstring"""
     
-    def __init__(self,f) :
-            self.matrix=Image.open(f)
+    def __init__(self,f=None,new=False) :
+            if new:
+                self.matrix=Image.new('1',(1,1))
+            else:
+                self.matrix=Image.open(f)
             pass
     def putPixel (self, x, y) :
             """Method sets the pixel colour to black (for single-band images)"""
@@ -186,3 +189,5 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
     print im.getSize()
     im.showPicture()
     pass
+##    im=Frame(new=True)
+##    im.showPicture()

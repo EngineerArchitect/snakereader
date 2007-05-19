@@ -9,7 +9,12 @@ from neuralnetwork import NeuralNetwork
 
 
 class LineFrame(Frame) :
-
+    def __init__(self,f=None,new=False) :
+        if new:
+            self.matrix=Image.new('1',(5000,5000))
+        else:
+            self.matrix=Image.open(f)
+        pass
     def extractCharacters(self): #główna metoda wywołujaca pozostałe
         vHisto = self.vLinesHistogram()
         length, high = self.getSize()
@@ -168,9 +173,11 @@ def findSpaceLength(Histogram, High): #znajduje długość spacji
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
 
-	f=open("line.bmp","rb")
-	Image=LineFrame(f)
-	kafels=Image.extractCharacters()
-	for i in range(0,len(kafels)):
-            for j in range(0, len(kafels[i])):
-                kafels[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
+##	f=open("line.bmp","rb")
+##	Image=LineFrame(f)
+##	kafels=Image.extractCharacters()
+##	for i in range(0,len(kafels)):
+##            for j in range(0, len(kafels[i])):
+##                kafels[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
+        im=LineFrame(new=True)
+        im.showPicture()
