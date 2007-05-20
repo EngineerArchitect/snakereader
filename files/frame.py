@@ -108,7 +108,7 @@ class Frame :
     
     def upperCut (self) :
             """Cuts the image from the upper side to the beginning of text"""
-            u_cut_point=0
+            u_cutpoint=0
             for i in range(self.matrix.size[1]-1):
                 if self.hLineHistogram(i) >= 2: #0.01*self.matrix.size[0]:
                     u_cutpoint = i
@@ -184,7 +184,7 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
     im.blackWhite()
     im.clear()
     print im.getSize()
-    im=im.hCut()
+    im=im.upperCut()
     im=im.leftCut()
     print im.getSize()
     im.showPicture()
