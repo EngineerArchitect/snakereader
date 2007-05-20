@@ -63,7 +63,7 @@ class Control:
         #buduje slowo z najlepszych i sprawdza je
         for i in range(0,len(tupleListList)):
             checkword=checkword+tupleListList[i][0][0]
-        if dictionaryObject.UniversalDictStruct.has(checkword)=true:
+        if dictionaryObject.UniversalDictStruct.has(checkword)==True:
             return checkword
         else:
             #robi wspaniala strukture drzewiasta
