@@ -12,7 +12,7 @@ class BlockFrame(Frame) :
           pass
      def extractLine (self):
           """returns one line from the text"""
-          self.upperCut()
+          self.hCut()
 
           for treshold in range (20,0,-1):
                if self.findCutpoint(treshold)>0: ## later: pixels per character            
@@ -28,7 +28,7 @@ class BlockFrame(Frame) :
           
      def findCutpoint(self,treshold):
           """finds the hight of a sigle line"""
-          cutpoint=0
+          cutpoint=1
           for i in range (self.matrix.size[1]):
                if self.hLineHistogram(i)>treshold:
                     cutpoint+=1
@@ -51,7 +51,7 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("200digram2.jpg",'rb')
+     f=open("a.bmp",'rb')
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
