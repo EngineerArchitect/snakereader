@@ -20,7 +20,7 @@ class Dictionary :
 		for linijka in slownik:
                         for i in range(0,len(linijka)):
                                 #bierze kazda linijke i wrzuca ja do listy list list
-                                
+                                pass
 	def has (self, word) :
 		"""method docstring"""
 		pass
