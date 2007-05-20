@@ -13,13 +13,12 @@ class BlockFrame(Frame) :
      def extractLine (self):
           """returns one line from the text"""
           self.upperCut()
-##          cutpoint=self.findCutpoint()
+
           for treshold in range (20,0,-1):
                if self.findCutpoint(treshold)>0: ## later: pixels per character            
                     cutpoint=self.findCutpoint(treshold)
                
-##                    print '                 '+str(treshold)
-##                  break
+
           line=LineFrame(new=True)
           
           line.matrix=self.matrix.crop((0,0,self.matrix.size[0],cutpoint))

@@ -43,7 +43,7 @@ class Control:
                 text+=self.textComposition(wordRead,usedDictionary)+' '
             text+='\n'
         return text
-    def blockSegmentation(self,picture,listOfOptions):
+    def blockSegmentation(self,picture,listOfOptions=[]):
         """segmentation of a block of text into list of lines given as LineFrame objects"""
         block=BlockFrame(picture)
         lines=block.extractLines()
@@ -64,4 +64,5 @@ class Control:
         # ta metoda na wejsciu ma liste list ktorek, a zwraca slowo		
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
     a=Control()
-    a.saveOptions()
+##    a.saveOptions()
+    a.blockSegmentation('200digram2.jpg')
