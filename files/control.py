@@ -67,4 +67,5 @@ class Control:
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
     a=Control()
 ##    a.saveOptions()
-    a.blockSegmentation('200digram2.jpg')
+    pict=a.inputFile('200digram2.jpg')
+    a.blockSegmentation(pict)
