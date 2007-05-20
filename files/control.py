@@ -31,6 +31,7 @@ class Control:
         # try?
         mainList=self.blockSegmentation(pic,[self.options[1],self.options[2]])
         # except?
+        dictionaryObject=dictionary(self.options[0])
         # PAWEL!!!!! usedDictionary=          tworzenie obiektu klasy Dictionary na wybranym slowniku (czyli self.options[0])
         usedDictionary=""
 ##        import pdb
@@ -60,6 +61,23 @@ class Control:
         pass
     def textComposition(self,tupleListList,dictionaryObject):
         """method docstring"""
+#        [[(a,23),(b,11),(c,8)],[(d,69),(e,44),(f,29)],[(g,96),(h,77),(i,63)]]
+        #buduje slowo z najlepszych i sprawdza je
+        for i in range(0,len(tupleListList)):
+            checkword=checkword+tupleListList[i][0](0)
+        if dictionaryObject.UniversalDictStruct.has(checkword)=true:
+            return checkword
+        else:
+            #robi wspaniala strukture drzewiasta
+            word=dictionaryObject.normalize(tupleListList) #normalizuje
+            wordpos=dictionaryObject.bestPos(word) #obliczam pozycje
+            plik=dictionaryObject.loadFiles(wordpos) #wybieram i laduje pliki
+            stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
+            #dictionaryObject.StarStruct.has(wordpos)
+            #costam dalej
+            
+            return checkword
+            
         # na poczatku metody textRecognition stworz sobie obiekt klasy Dictionary
         # zeby pozniej, w tej metodzie (ktora ma jako argument ten wlasnie obiekt - dictionaryObject)
         # z niego korzystac a nie za kazdym razem tworzyc nowy obiekt
