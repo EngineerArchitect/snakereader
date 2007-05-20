@@ -20,8 +20,8 @@ class CommandLine(Control) :
             if sys.argv[i] == '-r':
                 self.options[2] = sys.argv[i+1]
 
-sys.argv.append('a2.jpg')
-sys.argv.append('a2.txt')
+sys.argv.append('a.bmp')
+sys.argv.append('a.txt')
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()
