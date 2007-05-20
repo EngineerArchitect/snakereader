@@ -45,20 +45,13 @@ class Control:
         return text
     def blockSegmentation(self,picture,listOfOptions):
         """segmentation of a block of text into list of lines given as LineFrame objects"""
-        
-        # picture to obrazek wczytany binarnie do zmiennej
-        # listOfOptions to lista opcji, narazie to [wielkosc czcionki, rozdzielczosc skanu]
-        # ta metoda zwraca liste linijek w postaci obiektow LineFrame
-        block=blockFrame(picture)
+        block=BlockFrame(picture)
         lines=block.extractLines()
         return lines
-        pass
     def characterSegmentation(self,LineFrame,listOfOptions):
         """segmentation of text line, returns list of lists of CharFrame objects """
-
         characters = LineFrame.extractCharacters()
         return characters
-        
     def characterRecognition (self,CharFrame,listOfOptions):
         """recognition of one character given as an CharFrame object, returns a string"""
         # zwracasz liste krotek postaci (litera,prawdopodobienstwo)

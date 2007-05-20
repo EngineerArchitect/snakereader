@@ -32,8 +32,8 @@ class BlockFrame(Frame) :
           while self.matrix.size[1]!=0:
                a=self.extractLine()
                lines.append(a)
-               a.showPicture()
-               print self.matrix.size[1]
+               #a.showPicture()
+               #print self.matrix.size[1]
           return lines
           pass
         
