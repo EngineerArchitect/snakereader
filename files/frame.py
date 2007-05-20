@@ -90,7 +90,7 @@ class Frame :
         """Cuts the image from the left to the beginning of text"""
         l_cut_point=0
         for i in range(self.matrix.size[0]-1):
-                if self.hLineHistogram(i) >= 5: #0.001*self.matrix.size[1]:
+                if self.hLineHistogram(i) >= 2: #0.001*self.matrix.size[1]:
                     l_cutpoint = i
                     break
         self.matrix=self.matrix.crop((l_cutpoint,0,self.matrix.size[0],self.matrix.size[1]))
@@ -108,9 +108,9 @@ class Frame :
     
     def upperCut (self) :
             """Cuts the image from the upper side to the beginning of text"""
-            u_cutpoint=0
+            u_cut_point=0
             for i in range(self.matrix.size[1]-1):
-                if self.hLineHistogram(i) >= 5: #0.01*self.matrix.size[0]:
+                if self.hLineHistogram(i) >= 2: #0.01*self.matrix.size[0]:
                     u_cutpoint = i
                     break
             self.matrix=self.matrix.crop((0,u_cutpoint,self.matrix.size[0],self.matrix.size[1]))
