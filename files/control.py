@@ -31,9 +31,7 @@ class Control:
         # try?
         mainList=self.blockSegmentation(pic,[self.options[1],self.options[2]])
         # except?
-        dictionaryObject=dictionary(self.options[0])
-        # PAWEL!!!!! usedDictionary=          tworzenie obiektu klasy Dictionary na wybranym slowniku (czyli self.options[0])
-        usedDictionary=""
+        dictionaryObject=Dictionary(self.options[0])
 ##        import pdb
 ##        pdb.set_trace()
         for line in mainList:
@@ -41,7 +39,7 @@ class Control:
                 wordRead=[]
                 for char in word:
                     wordRead.append(self.characterRecognition(char,[]))
-                text+=self.textComposition(wordRead,usedDictionary)+' '
+                text+=self.textComposition(wordRead,dictionaryObject)+' '
             text+='\n'
         return text
     def blockSegmentation(self,picture,listOfOptions=[]):
@@ -64,7 +62,7 @@ class Control:
 #        [[(a,23),(b,11),(c,8)],[(d,69),(e,44),(f,29)],[(g,96),(h,77),(i,63)]]
         #buduje slowo z najlepszych i sprawdza je
         for i in range(0,len(tupleListList)):
-            checkword=checkword+tupleListList[i][0](0)
+            checkword=checkword+tupleListList[i][0][0]
         if dictionaryObject.UniversalDictStruct.has(checkword)=true:
             return checkword
         else:
@@ -75,13 +73,8 @@ class Control:
             stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
             #dictionaryObject.StarStruct.has(wordpos)
             #costam dalej
-            
             return checkword
-            
-        # na poczatku metody textRecognition stworz sobie obiekt klasy Dictionary
-        # zeby pozniej, w tej metodzie (ktora ma jako argument ten wlasnie obiekt - dictionaryObject)
-        # z niego korzystac a nie za kazdym razem tworzyc nowy obiekt
-        # ta metoda na wejsciu ma liste list ktorek, a zwraca slowo		
+
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
     a=Control()
 ##    a.saveOptions()
