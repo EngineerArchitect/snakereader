@@ -63,17 +63,17 @@ class Control:
         #buduje slowo z najlepszych i sprawdza je
         for i in range(0,len(tupleListList)):
             checkword=checkword+tupleListList[i][0][0]
-        if dictionaryObject.UniversalDictStruct.has(checkword)==True:
-            return checkword
-        else:
-            #robi wspaniala strukture drzewiasta
-            word=dictionaryObject.normalize(tupleListList) #normalizuje
-            wordpos=dictionaryObject.bestPos(word) #obliczam pozycje
-            plik=dictionaryObject.loadFiles(wordpos) #wybieram i laduje pliki
-            stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
-            #dictionaryObject.StarStruct.has(wordpos)
-            #costam dalej
-            return checkword
+##        if dictionaryObject.UniversalDictStruct.has(checkword)==True:
+        return checkword
+##        else:
+##            #robi wspaniala strukture drzewiasta
+##            word=dictionaryObject.normalize(tupleListList) #normalizuje
+##            wordpos=dictionaryObject.bestPos(word) #obliczam pozycje
+##            plik=dictionaryObject.loadFiles(wordpos) #wybieram i laduje pliki
+##            stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
+##            #dictionaryObject.StarStruct.has(wordpos)
+##            #costam dalej
+##            return checkword
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
     a=Control()
