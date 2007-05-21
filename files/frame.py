@@ -160,7 +160,7 @@ class Frame :
 
     def getSize(self):
         return self.matrix.size
-        return width,high
+        
 
     def makeWhite(self, x, y) :
         self.matrix.putpixel((x,y),255)

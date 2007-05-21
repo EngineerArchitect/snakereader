@@ -14,10 +14,10 @@ class LineFrame(Frame) :
             self.matrix=Image.new('1',(1,1))
         else:
             self.matrix=Image.open(f)
-        pass
+
     def extractCharacters(self): #główna metoda wywołujaca pozostałe
+        length, high=self.getSize()
         vHisto = self.vLinesHistogram()
-        length, high = self.getSize()
         spaceLength = findSpaceLength(vHisto,high)
         position = 0
         Line=[]
@@ -32,10 +32,14 @@ class LineFrame(Frame) :
                     Word=[]
                 elif char == "Enter":
                     Line.append(Word)
+                    ##for i in range(0,len(Line)):
+                      #  for j in range(0, len(Line[i])):
+                      #      Line[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
                     return Line
             else: # zwrócono obiekt typu znak
                 Word.append(char)
                 
+
     def findChar(self, position, spaceLength, ): 
         leer=0 # int, licznik pustych kolumn
         Queue=[] #kolejka, bedzie słuzyć do wyszukiwania i przechowywania sąsiadów
@@ -54,46 +58,52 @@ class LineFrame(Frame) :
                 if self.getPixel(position, i)==0: #sprawdzić czy na pewno taka kolejność współżędnych
                     Queue.append((position, i))
                     PiksList.append((position, i))
-            
+
             while len(Queue)>0:
                 Piksel=Queue.pop(0) #krotka zawierająca współrzędne piksela
                 neighbourhood=[(Piksel[0]-1, Piksel[1]+1),(Piksel[0]-1, Piksel[1]),(Piksel[0]-1, Piksel[1]-1),(Piksel[0], Piksel[1]+1),(Piksel[0], Piksel[1]-1),(Piksel[0]+1, Piksel[1]+1),(Piksel[0]+1, Piksel[1]),(Piksel[0]+1, Piksel[1]-1)]
                 #to co wyzej to lista współrzędnych sąsiadów Piksela
 
                 for neighbour in neighbourhood: #sprawdzamy sąsiedztwo
-                    if not(neighbour in PiksList) and (neighbour[0] in range(0,length-1)) and (neighbour[1] in range(0,high-1)) and self.getPixel(neighbour[0],neighbour[1])==0:
+                    if not(neighbour in PiksList) and (neighbour[0] in range(0,length)) and (neighbour[1] in range(0,high)) and self.getPixel(neighbour[0],neighbour[1])==0:
                         Queue.append(neighbour)
                         PiksList.append(neighbour)
-           
+            
             PiksList.sort() # soruje liste w ten sposób, że najpierw piksele z pierwszej kolumny potem z drugiej itd
+
+            
             PiksList=self.addHigherPiks(PiksList) #dodajemy wszystkie piksele nad grupą
             position1,High1=PiksList[0]
             position2,High2=PiksList[len(PiksList)-1]  # wten sposób uzyskamy numery skrajnych kolumn
             charLength=position2-position1
-            
-            if charLength<=high: #sprawdzamy czy nie wykryliśmy sklejki dłuższej niż długość kafelki
-                newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
-                Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać
-
-                for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
-                    Char.putPixel(el[0]-position1,el[1])
-                    self.makeWhite(el[0],el[1])
+            if len(PiksList)>5:
+                if charLength<=high: #sprawdzamy czy nie wykryliśmy sklejki dłuższej niż długość kafelki
+                    newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
+                    Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać
+    
+                    for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
+                        Char.putPixel(el[0]-position1,el[1])
+                        self.makeWhite(el[0],el[1])
+                            
+                    Char.reScale(20,20)
                     
-                Char.reScale(20,20)
-                
-                return newPosition, Char, charLength/2
+                    return newPosition, Char, charLength/2
 
-            else: #czyli gdy wykryto za długą sklejke
-                PiksList, Char = reconChar(PiksList,high)
-                print "to long"
-                for Piks in PiksList:
-                    self.makeWhite(Piks[0],Piks[1])
-                position1,High1=PiksList[0]
-                position2,High2=PiksList[len(PiksList)-1]  # wten sposób uzyskamy numery skrajnych kolumn
-                charLength=position2-position1
-                newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
+                else: #czyli gdy wykryto za długą sklejke
+                    PiksList, Char = reconChar(PiksList,high)
+                    for Piks in PiksList:
+                        self.makeWhite(Piks[0],Piks[1])
+                    position1,High1=PiksList[0]
+                    position2,High2=PiksList[len(PiksList)-1]  # wten sposób uzyskamy numery skrajnych kolumn
+                    charLength=position2-position1
+                    newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
 
-                return newPosition, Char, charLength/2
+                    return newPosition, Char, charLength/2
+            else:
+                for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
+                        self.makeWhite(el[0],el[1])
+                newPosition= position1+(charLength/2)
+                return newPosition, "None", charLength/2
 
 
 #pisze tą metode bo chyba mi sie przyda, a nie ma jej w projekcie.
@@ -168,16 +178,19 @@ def findSpaceLength(Histogram, High): #znajduje długość spacji
                 length=0
                 number+=1
             else:length=0
-    return summ/number  
+    if number<>0:    return summ/number
+    else: return 6
     
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
 
-##	f=open("line.bmp","rb")
-##	Image=LineFrame(f)
-##	kafels=Image.extractCharacters()
-##	for i in range(0,len(kafels)):
-##            for j in range(0, len(kafels[i])):
-##                kafels[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
-        im=LineFrame(new=True)
-        im.showPicture()
+	f=open("line1.bmp","rb")
+	Image=LineFrame(f)
+	Image.blackWhite()
+	kafels=Image.extractCharacters()
+	for i in range(0,len(kafels)):
+            for j in range(0, len(kafels[i])):
+                kafels[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
+       # im=LineFrame(new=True)
+        #im.showPicture()
+
