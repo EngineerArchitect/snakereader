@@ -56,9 +56,10 @@ class Control:
     def characterRecognition (self,CharFrame,listOfOptions):
         """recognition of one character given as an CharFrame object, returns a string"""
         # zwracasz liste krotek postaci (litera,prawdopodobienstwo)
-        pass
+        return [('a',23),('b',11),('c',8)]
     def textComposition(self,tupleListList,dictionaryObject):
         """method docstring"""
+        checkword=''
 #        [[(a,23),(b,11),(c,8)],[(d,69),(e,44),(f,29)],[(g,96),(h,77),(i,63)]]
         #buduje slowo z najlepszych i sprawdza je
         for i in range(0,len(tupleListList)):
