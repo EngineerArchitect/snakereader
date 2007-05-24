@@ -38,10 +38,12 @@ class BlockFrame(Frame) :
      def extractLines(self):
           """returns a list of all lines in the text"""
           lines=[]
+##          i=0
           while self.matrix.size[1]!=0:
                a=self.extractLine()
                lines.append(a)
-               a.showPicture()
+##               a.matrix.save(str(i)+'.BMP')
+##               i+=1
 ##               print self.matrix.size[1]
           return lines
           pass
@@ -51,15 +53,16 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("p.jpg",'rb')
+     f=open("200digram2.jpg",'rb')
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
-     l=im.extractLines()
-     
+##     l=im.extractLines()
+     im.hCut()
+     im.vCut()
 ##     
 ##     
-##     im.showPicture()
+     im.showPicture()
 ##     im.upperCut()
 ##for i in range (50):
 ##     print im.findCutpoint(i)
