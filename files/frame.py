@@ -78,11 +78,23 @@ class Frame :
             pass
     
     def clear (self) :
-            """Clears single black pixels"""
-            for x in range((self.matrix.size[0]-1)):
-                for y in range((self.matrix.size[1]-1)):
+            """Clears single black pixels and makes single white pixels black"""
+            for x in range(1,self.matrix.size[0]-1):
+                if self.matrix.getpixel((x,0))<=128 and self.matrix.getpixel((x+1,0))>128 and self.matrix.getpixel((x-1,0))>128 and self.matrix.getpixel((x,1))>128:
+                    self.matrix.putpixel((x,0),255)
+                if self.matrix.getpixel((x,0))>128 and self.matrix.getpixel((x+1,0))<=128 and self.matrix.getpixel((x-1,0))<=128 and self.matrix.getpixel((x,1))<=128:
+                    self.matrix.putpixel((x,0),0)
+                    
+                for y in range(1,self.matrix.size[1]-1):
                     if self.matrix.getpixel((x,y))<=128 and self.matrix.getpixel((x+1,y))>128 and self.matrix.getpixel((x-1,y))>128 and self.matrix.getpixel((x,y+1))>128 and self.matrix.getpixel((x,y-1))>128:
                         self.matrix.putpixel((x,y),255)
+                    if self.matrix.getpixel((x,y))>128 and self.matrix.getpixel((x+1,y))<=128 and self.matrix.getpixel((x-1,y))<=128 and self.matrix.getpixel((x,y+1))<=128 and self.matrix.getpixel((x,y-1))<=128:
+                        self.matrix.putpixel((x,y),0)
+                        
+                if self.matrix.getpixel((x,self.matrix.size[1]-1))<=128 and self.matrix.getpixel((x+1,self.matrix.size[1]-1))>128 and self.matrix.getpixel((x-1,self.matrix.size[1]-1))>128 and self.matrix.getpixel((x,self.matrix.size[1]-2))>128:
+                    self.matrix.putpixel((x,self.matrix.size[1]-1),255)
+                if self.matrix.getpixel((x,self.matrix.size[1]-1))>128 and self.matrix.getpixel((x+1,self.matrix.size[1]-1))<=128 and self.matrix.getpixel((x-1,self.matrix.size[1]-1))<=128 and self.matrix.getpixel((x,self.matrix.size[1]-2))<=128:
+                    self.matrix.putpixel((x,self.matrix.size[1]-1),0)
 
             pass
     
@@ -90,7 +102,7 @@ class Frame :
         """Cuts the image from the left to the beginning of text"""
         l_cut_point=0
         for i in range(self.matrix.size[0]-1):
-                if self.hLineHistogram(i) >= 2: #0.001*self.matrix.size[1]:
+                if self.vLineHistogram(i) >= 2: #0.001*self.matrix.size[1]:
                     l_cutpoint = i
                     break
         self.matrix=self.matrix.crop((l_cutpoint,0,self.matrix.size[0],self.matrix.size[1]))
@@ -179,14 +191,15 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("200digram2.jpg",'rb')
+    f=open("p.jpg",'rb')
     im=Frame(f)
     im.blackWhite()
+    
     im.clear()
-    print im.getSize()
-    im=im.upperCut()
+##    print im.getSize()
+##    im=im.upperCut()
     im=im.leftCut()
-    print im.getSize()
+##    print im.getSize()
     im.showPicture()
     pass
 ##    im=Frame(new=True)
