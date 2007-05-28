@@ -1,17 +1,20 @@
 # -*- coding: utf8 -*-
-"""Module docstring"""
+"""Module is controling data flow in program using Control class"""
 from blockframe import *
 from lineframe import *
 from charframe import *
 from dictionary import *
+from glob import glob
 class Control:
-    def __init__(self): # jeszcze bez szukania slownikow
+    def __init__(self):
+        """class constructor; assigns atributes: self.options (list of options read from file) and self.dictionaries (list of available dictionaries)"""
         optionFile=open('options.ini','r')
         optionList=optionFile.readlines()
         optionFile.close()
         self.options=[opt[opt.index('=')+1:].strip() for opt in optionList]
+        self.dictionaries=[dic[-7:-4] for dic in glob('.\dict\*.txt')]
     def saveOptions(self):
-        """method docstring"""
+        """saves atribute self.options to options.ini file"""
         optionFile=open('options.ini','r')
         optionList=optionFile.readlines()
         optionFile.close()
@@ -22,11 +25,11 @@ class Control:
         optionFile.writelines(optionList)
         optionFile.close()
     def inputFile(self,filename):
-        """method docstring"""
+        """returns binary read picture file"""
         picture=open(filename,'rb')
         return picture
     def textRecognition(self,pic): # jeszcze bez wyjatkow
-        """method docstring"""
+        """main class method; uses methods below to cut picture file to lines and to characters, and to recognize characters"""
         text=""
         # try?
         mainList=self.blockSegmentation(pic,[self.options[1],self.options[2]])
@@ -78,6 +81,4 @@ class Control:
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
     a=Control()
-##    a.saveOptions()
-    pict=a.inputFile('200digram2.jpg')
-    a.blockSegmentation(pict)
+    a.saveOptions()
