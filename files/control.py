@@ -31,12 +31,8 @@ class Control:
     def textRecognition(self,pic): # jeszcze bez wyjatkow
         """main class method; uses methods below to cut picture file to lines and to characters, and to recognize characters"""
         text=""
-        # try?
         mainList=self.blockSegmentation(pic,[self.options[1],self.options[2]])
-        # except?
         dictionaryObject=Dictionary(self.options[0])
-##        import pdb
-##        pdb.set_trace()
         for line in mainList:
             for word in self.characterSegmentation(line,[]):
                 wordRead=[]
@@ -58,7 +54,6 @@ class Control:
         return characters
     def characterRecognition (self,CharFrame,listOfOptions):
         """recognition of one character given as an CharFrame object, returns a string"""
-        # zwracasz liste krotek postaci (litera,prawdopodobienstwo)
         return [('a',23),('b',11),('c',8)]
     def textComposition(self,tupleListList,dictionaryObject):
         """method docstring"""
@@ -79,6 +74,6 @@ class Control:
 ##            #costam dalej
 ##            return checkword
 
-if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
+if __name__ == "__main__":
     a=Control()
     a.saveOptions()

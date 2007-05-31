@@ -5,12 +5,12 @@ sys.path.append(sys.path[0]+"/files")
 from control import *
 class GUI(Control) :
     """Class docstring"""
-    def showInterface (self) :
+    def showInterface(self) :
         """method docstring"""
         pass
 class CommandLine(Control) :
     """Class docstring"""
-    def readCommandLine (self) :
+    def readCommandLine(self) :
         """method docstring"""
         for i in range (0, len(sys.argv)):
             if sys.argv[i] == '-d':
@@ -25,10 +25,19 @@ sys.argv.append('a.txt')
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()
-    picture=commandLine.inputFile(sys.argv[1])
-    text=commandLine.textRecognition(picture)
-    outputFile=open(sys.argv[2],'w')
-    outputFile.write(text)
-    outputFile.close()
+    try:
+        picture=commandLine.inputFile(sys.argv[1])
+    except IOError, details:
+        print "Error:", details
+    else:
+        try:
+            text=commandLine.textRecognition(picture)
+        except IOError, details:
+            print "Error:", details
+        else:
+            outputFile=open(sys.argv[2],'w')
+            outputFile.write(text)
+            outputFile.close()
 else:
-    pass #using graphic interface
+    interface=GUI()
+    interface.showInterface()
