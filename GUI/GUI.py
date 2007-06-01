@@ -50,10 +50,13 @@ class MyFrame(wx.Frame):
         # Tool Bar
         self.Snakereader_toolbar = wx.ToolBar(self, -1)
         self.SetToolBar(self.Snakereader_toolbar)
-        self.Snakereader_toolbar.AddLabelTool(51, u"Otwórz", wx.Bitmap("c.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "", "")
-        self.Snakereader_toolbar.AddLabelTool(52, "Rozpoznaj", wx.Bitmap("c.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "", "")
-        self.Snakereader_toolbar.AddLabelTool(53, "Zapisz", wx.Bitmap("c.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "", "")
-        self.Snakereader_toolbar.AddLabelTool(54, "Opcje", wx.Bitmap("c.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "", "")
+        self.Snakereader_toolbar.AddLabelTool(51, u"Otwórz", wx.Bitmap("Otworz.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "Otworz", "")
+        self.Snakereader_toolbar.AddLabelTool(52, "Rozpoznaj", wx.Bitmap("Rozpoznaj.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "Rozpoznaj", "")
+        self.Snakereader_toolbar.AddLabelTool(53, "Zapisz", wx.Bitmap("Zapisz.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "Zapisz", "")
+        self.Snakereader_toolbar.AddSeparator()
+        self.Snakereader_toolbar.AddSeparator()
+        self.Snakereader_toolbar.AddSeparator()
+        self.Snakereader_toolbar.AddLabelTool(54, "Opcje", wx.Bitmap("Opcje.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "Opcje", "")
         # Tool Bar end
 
         self.__set_properties()
@@ -64,6 +67,8 @@ class MyFrame(wx.Frame):
 
 
 ### moj kod
+
+        
 
         wx.EVT_MENU(self, ID_OPEN, self.OnOpen)
         #wx.EVT_MENU(self, ID_SAVE, self.OnSave)
@@ -130,6 +135,7 @@ class MyFrame(wx.Frame):
                                   "Wroclaw, 2007","O programie", wx.OK)
         dialog.ShowModal()
         dialog.Destroy()
+        #self.components.ID_RECOG.enabled = False
                              
     
         
@@ -138,7 +144,11 @@ class MyFrame(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Snakereader")
+        _icon = wx.EmptyIcon()
+        _icon.CopyFromBitmap(wx.Bitmap("Snake.bmp", wx.BITMAP_TYPE_ANY))
+        self.SetIcon(_icon)
         self.SetSize((435, 360))
+        self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
         # end wxGlade
 
