@@ -42,7 +42,7 @@ class BlockFrame(Frame) :
           while self.matrix.size[1]!=0:
                a=self.extractLine()
                lines.append(a)
-##               a.matrix.save(str(i)+'.BMP')
+               a.matrix.save(str(i)+'.BMP')
 ##               i+=1
 ##               print self.matrix.size[1]
           return lines
@@ -53,16 +53,23 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("200digram2.jpg",'rb')
+     f=open("45c.jpg",'rb')
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
-##     l=im.extractLines()
-     im.hCut()
-     im.vCut()
-##     
-##     
-     im.showPicture()
+     a=im.matrix.tobitmap()
+     
+     print a
+     x=Image.fromstring('1',(896,253),a)
+     x.show()
+##     print a[2398]
+####     im.clear()
+######     l=im.extractLines()
+####     im.hCut()
+####     im.vCut()
+######     
+####        
+##     im.showPicture()
 ##     im.upperCut()
 ##for i in range (50):
 ##     print im.findCutpoint(i)

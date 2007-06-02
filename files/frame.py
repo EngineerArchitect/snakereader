@@ -24,23 +24,25 @@ class Frame :
 
     def rotate (self,angle) :
             """Rotates an image by an angle"""
-            self.matrix=self.matrix.rotate(angle)
+            self.matrix=self.matrix.rotate(angle, expand=True)
             pass
 
     def blackWhite (self) :
             """Converts an image to single-band binary image"""
-            
+            import ImageFilter
 ##
 ##            enhancer = ImageEnhance.Contrast(self.matrix)
 ##
 ##            for i in range(8):
 ##                factor = i / 4.0
 ##                enhancer.enhance(factor).convert('1').show("Contrast %f" % factor)
-##            self.matrix=self.matrix.point(lambda i: 122.5*(math.tanh(2*i-256)+1))
+##           self.matrix=self.matrix.point(lambda i: 122.5*(math.tanh(2*i-256)+1))
+            self.matrix=self.matrix.convert('L')
+##            self.matrix=self.matrix.point(lambda i:  i+50)
 
-            self.matrix = ImageEnhance.Contrast(self.matrix)
-            self.matrix = self.matrix.enhance(2.5)
-            
+##            self.matrix = ImageEnhance.Contrast(self.matrix)
+##            self.matrix = self.matrix.enhance(1.5)
+            self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
             self.matrix=self.matrix.convert('1')
 
     def hLineHistogram (self, number) :
@@ -79,23 +81,55 @@ class Frame :
     
     def clear (self) :
             """Clears single black pixels and makes single white pixels black"""
+            pix=self.matrix.load()
+            for y in range(self.matrix.size[1]):
+                pix[0,y]=255
+                pix[self.matrix.size[0]-1,y]=255
             for x in range(1,self.matrix.size[0]-1):
-                if self.matrix.getpixel((x,0))<=128 and self.matrix.getpixel((x+1,0))>128 and self.matrix.getpixel((x-1,0))>128 and self.matrix.getpixel((x,1))>128:
-                    self.matrix.putpixel((x,0),255)
-                if self.matrix.getpixel((x,0))>128 and self.matrix.getpixel((x+1,0))<=128 and self.matrix.getpixel((x-1,0))<=128 and self.matrix.getpixel((x,1))<=128:
-                    self.matrix.putpixel((x,0),0)
+                
+                if pix[x,0]<=128 and pix[x+1,0]>128 and pix[x-1,0]>128 and pix[x,1]>128:
+                    pix[x,0]=255
+                if pix[x,0]>128 and pix[x+1,0]<=128 and pix[x-1,0]<=128 and pix[x,1]<=128:
+                    pix[x,0]=0
                     
                 for y in range(1,self.matrix.size[1]-1):
-                    if self.matrix.getpixel((x,y))<=128 and self.matrix.getpixel((x+1,y))>128 and self.matrix.getpixel((x-1,y))>128 and self.matrix.getpixel((x,y+1))>128 and self.matrix.getpixel((x,y-1))>128:
-                        self.matrix.putpixel((x,y),255)
-                    if self.matrix.getpixel((x,y))>128 and self.matrix.getpixel((x+1,y))<=128 and self.matrix.getpixel((x-1,y))<=128 and self.matrix.getpixel((x,y+1))<=128 and self.matrix.getpixel((x,y-1))<=128:
-                        self.matrix.putpixel((x,y),0)
-                        
-                if self.matrix.getpixel((x,self.matrix.size[1]-1))<=128 and self.matrix.getpixel((x+1,self.matrix.size[1]-1))>128 and self.matrix.getpixel((x-1,self.matrix.size[1]-1))>128 and self.matrix.getpixel((x,self.matrix.size[1]-2))>128:
-                    self.matrix.putpixel((x,self.matrix.size[1]-1),255)
-                if self.matrix.getpixel((x,self.matrix.size[1]-1))>128 and self.matrix.getpixel((x+1,self.matrix.size[1]-1))<=128 and self.matrix.getpixel((x-1,self.matrix.size[1]-1))<=128 and self.matrix.getpixel((x,self.matrix.size[1]-2))<=128:
-                    self.matrix.putpixel((x,self.matrix.size[1]-1),0)
+                    i=0
+                    a=0
+                    if pix[x,y]<=128:
+                        if pix[x+1,y+1]>128: i+=1
+                        if pix[x+1,y-1]>128: i+=1
+                        if pix[x-1,y+1]>128: i+=1
+                        if pix[x-1,y-1]>128: i+=1
+                        if pix[x+1,y]>128: i+=1
+                        if pix[x-1,y]>128: i+=1
+                        if pix[x,y+1]>128: i+=1
+                        if pix[x,y-1]>128: i+=1
 
+                        if i>=6: pix[x,y]=255
+
+                    if pix[x,y]>128:
+                        if pix[x+1,y+1]<=128: a+=1
+                        if pix[x+1,y-1]<=128: a+=1
+                        if pix[x-1,y+1]<=128: a+=1
+                        if pix[x-1,y-1]<=128:  a+=1
+                        
+                        if pix[x+1,y]<=128: a+=1
+                        if pix[x-1,y]<=128: a+=1
+                        if pix[x,y+1]<=128: a+=1
+                        if pix[x,y-1]<=128: a+=1
+##
+                        if a>=6: pix[x,y]=0
+##                        
+####                    if pix[x,y]<=128 and pix[x+1,y]>128 and pix[x-1,y]>128 and pix[x,y+1]>128 and pix[x,y-1]>128:
+####                        pix[x,y]=255
+##                    if pix[x,y]>128 and pix[x+1,y]<=128 and pix[x-1,y]<=128 and pix[x,y+1]<=128 and pix[x,y-1]<=128:
+##                        pix[x,y]=0
+                        
+                if pix[x,self.matrix.size[1]-1]<=128 and pix[x+1,self.matrix.size[1]-1]>128 and pix[x-1,self.matrix.size[1]-1]>128 and pix[x,self.matrix.size[1]-2]>128:
+                    pix[x,self.matrix.size[1]-1]=255
+                if pix[x,self.matrix.size[1]-1]>128 and pix[x+1,self.matrix.size[1]-1]<=128 and pix[x-1,self.matrix.size[1]-1]<=128 and pix[x,self.matrix.size[1]-2]<=128:
+                    pix[x,self.matrix.size[1]-1]=0
+                
             pass
     
     def leftCut(self) :
@@ -191,15 +225,19 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("p.jpg",'rb')
+    f=open("200boldy1.jpg",'rb')
     im=Frame(f)
     im.blackWhite()
-    
+##    print list(im.matrix.getdata())
+##    im.clear()
+##    im.showPicture()
+##    im.clear()
     im.clear()
-##    print im.getSize()
-##    im=im.upperCut()
-    im=im.leftCut()
-##    print im.getSize()
+####    print im.getSize()
+####    im=im.upperCut()
+##    im=im.vCut()
+####    print im.getSize()
+##    im.rotate(45)
     im.showPicture()
     pass
 ##    im=Frame(new=True)
