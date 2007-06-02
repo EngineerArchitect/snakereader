@@ -43,24 +43,24 @@ class Dictionary :
 
         def createDataStructure (filename) :
                 """method docstring"""
-                struktura=[]
+                struktura=([],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[])
                 slownik=open(filename,'r')
-                numerwyrazu=-1
-                miejsceostatniego=0
+                a=-1
                 for linijka in slownik:
-                        numerwyrazu+=1
-                        if miejsceostatniego==linijka[0]:
-                                for i in range(1,len(linijka)):
-                                        struktura[i][ord(linijka[i])-97].append(numerwyrazu)
-                        else:
-                                for j in range(miejsceostatniego,linijka[0]):
-                                        struktura.insert(0,[ord(linijka[1])][numerwyrazu])
-                                for i in range(1,len(linijka)):
-                                        struktura[i][ord(linijka[i])-97].append(numerwyrazu)
-                slownik=close(filename)
+                        a+=1
+                        start=99-int(linijka[0])*10-int(linijka[1])
+                        for i in range(0,len(linijka)-3):
+                                jest=0
+                                for j in range(0,len(struktura[start+i])):
+                                        if struktura[start+i][j][0]==linijka[i+2]:
+                                                struktura[start+i][j][1].append(a)
+                                                jest=1
+                                if jest==0:
+                                        struktura[start+i].append((linijka[i+2],[a]))
+                                        jest=0
+                slownik.close()
                 return struktura
 
-                                
         def has (self, word) :
                 """method docstring"""
                 pass
