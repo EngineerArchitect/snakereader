@@ -1,4 +1,4 @@
-# BOND v. 0.3.2
+# BOND v. 0.5.0
 # Pawel Szoltysek
 # 11.05.2007
 
@@ -11,19 +11,24 @@
 #  choose [two]]), at most one file will be in one moment loaded into
 #  your RAM.
 
-sciezka=raw_input("Choose dictionary file: ")
+#sciezka=raw_input("Choose dictionary file: ")
+sciezka="dict/slo.txt"
 slownik=file(sciezka,"r")
 
 for linijka in slownik:
     linijka=linijka.lower()
-    for i in range(0,len(linijka)):
-        for j in range(i+1,len(linijka)):
+    for i in range(0,len(linijka)-1):
+        for j in range(i+1,len(linijka)-1):
             NazwaPliku=linijka[i]
             for k in range(i+1,j):
                 NazwaPliku=NazwaPliku+'_'
             NazwaPliku=NazwaPliku+linijka[j]
-            NowySlownik=file("D:\!"+NazwaPliku+".txt",'a')
-# male pytanie gdzie beda przechowywane slowniki
-            NowySlownik.write(linijka) #dodac znak konca linii
+            NowySlownik=file("dict/slo/"+NazwaPliku+".txt",'a')
+            if i>9:
+                NowySlownik.write(str(i))
+            else:
+                NowySlownik.write('0')
+                NowySlownik.write(str(i))
+            NowySlownik.write(linijka)
             NowySlownik.close()
 slownik.close()
