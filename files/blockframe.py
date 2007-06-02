@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 """Module docstring"""
-import Image
+import Image, numpy, pywt
 from frame import Frame
 from lineframe import LineFrame
 class BlockFrame(Frame) :
@@ -8,8 +8,15 @@ class BlockFrame(Frame) :
 ##     def __init__(self) :#init może zniknąć
 ##          pass
      def findLevel (self) :
-          """method docstring"""
-          pass
+          """Finds the skew of the text"""
+          data = numpy.array(list(self.matrix.getdata()))
+          data.shape = (self.matrix.size[1], self.matrix.size[0])
+          
+          data = pywt.dwt2(data,'Haar')
+          return data
+     def centroid(self,data):
+          """Finds the centroid of given set of data"""
+
      def extractLine (self):
           """returns one line from the text"""
           self.hCut()
@@ -38,12 +45,12 @@ class BlockFrame(Frame) :
      def extractLines(self):
           """returns a list of all lines in the text"""
           lines=[]
-##          i=0
+          i=0
           while self.matrix.size[1]!=0:
                a=self.extractLine()
                lines.append(a)
                a.matrix.save(str(i)+'.BMP')
-##               i+=1
+               i+=1
 ##               print self.matrix.size[1]
           return lines
           pass
@@ -57,16 +64,19 @@ if __name__ == "__main__":
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
-     a=im.matrix.tobitmap()
-     
-     print a
-     x=Image.fromstring('1',(896,253),a)
-     x.show()
+     im.hCut()
+     im.vCut()     
+     im.showPicture()
+     print im.findLevel()
+##     a=im.matrix.tobitmap()
+##     
+##     print a
+##     x=Image.fromstring('1',(896,253),a)
+##     x.show()
 ##     print a[2398]
 ####     im.clear()
-######     l=im.extractLines()
-####     im.hCut()
-####     im.vCut()
+     l=im.extractLines()
+
 ######     
 ####        
 ##     im.showPicture()
