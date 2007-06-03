@@ -80,11 +80,12 @@ class LineFrame(Frame) :
 
             
             PiksList=self.addHigherPiks(PiksList) #dodajemy wszystkie piksele nad grupą
+            PiksList.sort()
             position1,High1=PiksList[0]
             position2,High2=PiksList[len(PiksList)-1]  # wten sposób uzyskamy numery skrajnych kolumn
             charLength=position2-position1
             if len(PiksList)>5:
-                if charLength<=high: #sprawdzamy czy nie wykryliśmy sklejki dłuższej niż długość kafelki
+                if charLength<high: #sprawdzamy czy nie wykryliśmy sklejki dłuższej niż długość kafelki
                     newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
                     Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać
     
@@ -134,7 +135,7 @@ def reconChar(PiksList, high):
     NewPiksList=[]
     
     for piks in PiksList: #usówamy wszystkie piksele które nie mieszczą sie w kafelce
-        if piks[0]<position+high:
+        if piks[0]<position+high-1:
             NewPiksList.append(piks)
             
     PiksList=NewPiksList
