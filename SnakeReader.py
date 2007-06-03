@@ -34,35 +34,32 @@ class CommandLine(Control) :
 
 ID_OPEN = 11
 ID_SAVE = 12
-ID_EXIT = 13
-
-ID_OPT = 21
+ID_OPT = 13
+ID_EXIT = 14
 
 ID_RECOG = 31
 
 ID_DOCUM = 41
-ID_DEMANDS = 42
+ID_REQUIR = 42
 ID_ABOUT = 43
 
-ID_OPENB = 51
-ID_RECOGB = 52
-ID_SAVEB = 53
-ID_OPTB = 54
+ID_OPEN_B = 51
+ID_RECOG_B = 52
+ID_SAVE_B = 53
+ID_OPT_B = 54
 
 class Options(wx.Frame):
     def __init__(self, *args, **kwds):
         # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
-        self.label_4 = wx.StaticText(self, -1, "Dictionaries:")
-        self.static_line_3 = wx.StaticLine(self, -1, style=wx.LI_VERTICAL)
-        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=["choice 1", "choice 2"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.label_4 = wx.StaticText(self, -1, "")
+        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=["choice 1"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
         self.label_5 = wx.StaticText(self, -1, "Technical data:")
-        self.static_line_4 = wx.StaticLine(self, -1, style=wx.LI_VERTICAL)
-        self.label_6 = wx.StaticText(self, -1, "Size of font")
+        self.label_6 = wx.StaticText(self, -1, "Size of font   ")
         self.text_ctrl_3 = wx.TextCtrl(self, -1, "")
-        self.label_7 = wx.StaticText(self, -1, "Resolution of a scan")
+        self.label_7 = wx.StaticText(self, -1, "Resolution of a scan   ")
         self.text_ctrl_4 = wx.TextCtrl(self, -1, "")
         self.static_line_2 = wx.StaticLine(self, -1)
         self.button_1 = wx.Button(self, -1, "OK")
@@ -74,10 +71,9 @@ class Options(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Options")
-        self.SetSize((300, 300))
-        self.SetBackgroundColour(wx.Colour(234, 234, 207))
+        self.SetSize((300, 200))
+        self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
-        self.radio_box_1.SetMinSize((-1, -1))
         self.radio_box_1.SetSelection(0)
         # end wxGlade
 
@@ -92,29 +88,28 @@ class Options(wx.Frame):
         sizer_11 = wx.BoxSizer(wx.VERTICAL)
         sizer_12 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_11.Add(self.label_4, 0, 0, 0)
-        sizer_12.Add(self.static_line_3, 0, wx.EXPAND, 0)
-        sizer_12.Add(self.radio_box_1, 0, 0, 0)
+        sizer_12.Add(self.radio_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
         sizer_11.Add(sizer_12, 1, wx.EXPAND, 0)
         sizer_11.Add(self.static_line_1, 0, wx.EXPAND, 0)
         sizer_10.Add(sizer_11, 1, wx.EXPAND, 0)
         sizer_13.Add(self.label_5, 0, 0, 0)
-        sizer_14.Add(self.static_line_4, 0, wx.EXPAND, 0)
-        grid_sizer_1.Add(self.label_6, 0, 0, 0)
+        grid_sizer_1.Add(self.label_6, 0, wx.ALIGN_RIGHT, 0)
         grid_sizer_1.Add(self.text_ctrl_3, 0, 0, 0)
-        grid_sizer_1.Add(self.label_7, 0, 0, 0)
+        grid_sizer_1.Add(self.label_7, 0, wx.ALIGN_RIGHT, 0)
         grid_sizer_1.Add(self.text_ctrl_4, 0, 0, 0)
         sizer_15.Add(grid_sizer_1, 1, wx.EXPAND, 0)
         sizer_14.Add(sizer_15, 1, wx.EXPAND, 0)
         sizer_13.Add(sizer_14, 1, wx.EXPAND, 0)
         sizer_13.Add(self.static_line_2, 0, wx.EXPAND, 0)
         sizer_10.Add(sizer_13, 1, wx.EXPAND, 0)
-        sizer_10.Add(self.button_1, 0, 0, 0)
+        sizer_10.Add(self.button_1, 0, wx.ALIGN_RIGHT, 0)
         sizer_1.Add(sizer_10, 1, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
         self.Layout()
         # end wxGlade
 
-# end of class Options
+# end of class MyFrame
+
 
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
@@ -128,8 +123,8 @@ class MyFrame(wx.Frame):
         wxglade_tmp_menu = wx.Menu()
         wxglade_tmp_menu.Append(11, "Open", "", wx.ITEM_NORMAL)
         wxglade_tmp_menu.Append(12, "Save", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(21, "Options", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(13, "Exit", "", wx.ITEM_NORMAL)
+        wxglade_tmp_menu.Append(13, "Options", "", wx.ITEM_NORMAL)
+        wxglade_tmp_menu.Append(14, "Exit", "", wx.ITEM_NORMAL)
         self.Snakereader_menubar.Append(wxglade_tmp_menu, "File")
         wxglade_tmp_menu = wx.Menu()
         wxglade_tmp_menu.Append(31, "Recognize", "", wx.ITEM_NORMAL)
@@ -154,6 +149,9 @@ class MyFrame(wx.Frame):
         self.bitmap = wx.StaticBitmap(self, -1, wx.Bitmap(".//files//back.bmp", wx.BITMAP_TYPE_ANY))
         self.picture = None
         self.text = ""
+
+        self.text_ctrl_1 = wx.TextCtrl(self, -1, "outcome text")
+        
         self.__set_properties()
         self.__do_layout(self.bitmap)
 
@@ -167,17 +165,19 @@ class MyFrame(wx.Frame):
 
         wx.EVT_MENU(self, ID_OPEN, self.OnOpen)
         #wx.EVT_MENU(self, ID_SAVE, self.OnSave)
-        wx.EVT_MENU(self, ID_EXIT, self.OnExit)        
         wx.EVT_MENU(self, ID_OPT, self.OnOpt)
+        wx.EVT_MENU(self, ID_EXIT, self.OnExit)        
+
         wx.EVT_MENU(self, ID_RECOG, self.OnRecog)
         
         #wx.EVT_MENU(self, ID_DOCUM, self.OnDocum)
-        wx.EVT_MENU(self, ID_DEMANDS, self.OnDemands)
+        wx.EVT_MENU(self, ID_REQUIR, self.OnRequir)
         wx.EVT_MENU(self, ID_ABOUT, self.OnAbout)
         #(inna wersja exit, niewazne)       self.Bind(wx.EVT_MENU, self.CloseWindow, id=ID_EXIT)
-        wx.EVT_TOOL(self, ID_OPENB, self.OnOpen)
-        wx.EVT_TOOL(self, ID_OPTB, self.OnOpt)
-        wx.EVT_TOOL(self, ID_RECOGB, self.OnRecog)
+
+        wx.EVT_TOOL(self, ID_OPEN_B, self.OnOpen)
+        wx.EVT_TOOL(self, ID_OPT_B, self.OnOpt)
+        wx.EVT_TOOL(self, ID_RECOG_B, self.OnRecog)
 
     def OnOpen(self,e):
         """ Open a file"""
@@ -216,27 +216,25 @@ class MyFrame(wx.Frame):
 
     #def OnDocum(self,e):
     
-    def OnDemands(self,e):
-        dialog = wx.MessageDialog(self, "DANE WEJSCIOWE:\n"
-                                  "dokument w postaci zeskanowanego obrazu \n"
-                                  "lub zdjecia cyfrowego (format bmp lub jpg):\n"
-                                  "\t jezyk polski,\n"
-                                  "\t pismo drukowane,\n"
-                                  "\t zarowno tekst jak i tlo jednokolorowe i jednotonowe,\n"
-                                  "\t duzy kontrast pomiedzy kolorem tekstu i tla,\n"
-                                  "\t rozdzielczosc 300dpi,\n"
-                                  "\t uklad jednorodny (brak pol tekstowych, rysunkow, tabel, kolumn, itp.).\n\n"
-                                  "DANE WYJSCIOWE:\n"
-                                  "dokument przetworzony na postac elektroniczna\n"
-                                  "i zapisany w formacie txt","Wymagania", wx.OK)
+    def OnRequir(self,e):
+        dialog = wx.MessageDialog(self, "INPUT DATA:\n"
+                                  "text document as a picture (bmp or jpg format):\n"
+                                  "\t - polish language,\n"
+                                  "\t - not handwriting,\n"
+                                  "\t - text (and background) in one colour and tint,\n"
+                                  "\t - contrast between text and background,\n"
+                                  "\t - resolution min 300dpi,\n"
+                                  "\t - homogeneous arrangement (without text areas, pictures, etc.)\n\n"
+                                  "OUTPUT DATA:\n"
+                                  "document converted to an electronic form and saved in txt format", "Requirements", wx.OK)
         dialog.ShowModal()
         dialog.Destroy()
 
         
     def OnAbout(self,e):
-        dialog = wx.MessageDialog(self, " Snakereader jest projektem Open Source \n"
-                                  "stworzonym przez studentow Politechniki Wroclawskiej \n\n"
-                                  "Wroclaw, 2007","O programie", wx.OK)
+        dialog = wx.MessageDialog(self, "Snakereader is an Open Source project \n"
+                                  "created by students of Wroclaw University of Technology \n\n"
+                                  "Wroclaw, 2007","About", wx.OK)
         dialog.ShowModal()
         dialog.Destroy()
         #self.components.ID_RECOG.enabled = False
@@ -251,15 +249,17 @@ class MyFrame(wx.Frame):
         _icon = wx.EmptyIcon()
         _icon.CopyFromBitmap(wx.Bitmap(".//files//Snake.bmp", wx.BITMAP_TYPE_ANY))
         self.SetIcon(_icon)
-        self.SetSize((-1, -1))
+        self.SetSize((712, 581))
         self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
+        self.bitmap.SetMinSize((356, 581))
         # end wxGlade
 
     def __do_layout(self, bitmap):
         # begin wxGlade: MyFrame.__do_layout
-        sizer_1 = wx.BoxSizer(wx.VERTICAL)
-        sizer_1.Add(bitmap,0,0,0)
+        sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
+        sizer_1.Add(self.bitmap, 0, 0, 0)
+        sizer_1.Add(self.text_ctrl_1, 0, 0, 0)
         self.SetSizer(sizer_1)
         self.Layout()
         # end wxGlade
@@ -271,10 +271,10 @@ class MyFrame(wx.Frame):
 # end of class MyFrame
 #-----------------GUI----------------#
                 
-sys.argv.append('l1.jpg')
-sys.argv.append('a.txt')
-sys.argv.append('-q')
-sys.argv.append('poor')
+#sys.argv.append('l1.jpg')
+#sys.argv.append('a.txt')
+#sys.argv.append('-q')
+#sys.argv.append('poor')
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()
