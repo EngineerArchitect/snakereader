@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-"""Module docstring"""
+"""Module for segmentation of single characters from line of text. Use Frame module, as a base, and adds methods for segmentation"""
 
 import copy
 import Image, ImageEnhance
@@ -9,13 +9,18 @@ from neuralnetwork import NeuralNetwork
 
 
 class LineFrame(Frame) :
+    """The same class like Frame, but adds methods for segmentation of single character from line of text"""
     def __init__(self,f=None,new=False) :
+        """Create LineFrame object. If new is False create new empty object, if new is True create obcject from file f"""
         if new:
             self.matrix=Image.new('1',(1,1))
         else:
             self.matrix=Image.open(f)
 
     def extractCharacters(self): #główna metoda wywołujaca pozostałe
+        """Steering method for character segmentation. Extract all single characters from line of text (LineFrame object).
+        Returns list of lists of CharFrame objets, where each CharFrame object is in size of 20x20 and contain single character.
+        Ineer list correspond to single word in text"""
         length, high=self.getSize()
         vHisto = self.vLinesHistogram()
         spaceLength = findSpaceLength(vHisto,high)
@@ -40,7 +45,9 @@ class LineFrame(Frame) :
                 Word.append(char)
                 
 
-    def findChar(self, position, spaceLength, ): 
+    def findChar(self, position, spaceLength ):
+        """Method find first single character in text starting from given position, finds Spaces too.
+        Returns CharFrame object in size of 20x20 which contain single character, and position, where it end to search."""
         leer=0 # int, licznik pustych kolumn
         Queue=[] #kolejka, bedzie słuzyć do wyszukiwania i przechowywania sąsiadów
         PiksList=[] #lista bedzie zawireała wynikową liste pikseli.
@@ -105,12 +112,8 @@ class LineFrame(Frame) :
                 newPosition= position1+(charLength/2)
                 return newPosition, "None", charLength/2
 
-
-#pisze tą metode bo chyba mi sie przyda, a nie ma jej w projekcie.
-#ma ona za zadanie dodać do PiksList piksele nad tymi już wybranymi
-#na razie zakładam że najwyższy wiersz ma numer 0, dopuki mi Grześ nie odpisze
-
     def addHigherPiks(self, PiksList):
+        """Add all pixels over already segmented character, this adds dots to character"""
         position1,High1=PiksList[0]
         position2,High2=PiksList[len(PiksList)-1]
         for kol in range(position1, position2): #dla każedj kolumny sprawdzamy piksele nad znalezionymi
@@ -126,6 +129,7 @@ class LineFrame(Frame) :
 #tylko że to są funkcje a nie metody, oczywiście moge z nich zrobic metody, ale nie wiem, czy to ma sens
 
 def reconChar(PiksList, high):
+    """If segmented character is too long, ask NeuralNetwork where to divide it"""
     position, h=PiksList[0]
     NewPiksList=[]
     
@@ -166,6 +170,7 @@ def reconChar(PiksList, high):
         return PiksList, Char # gdyby to nić nie dało by zwrócić cokolwiek"""
 
 def findSpaceLength(Histogram, High): #znajduje długość spacji
+    """function search expected length of space in line, based on empty columns in histogram"""
     summ=0
     length=0
     number=0
@@ -178,8 +183,8 @@ def findSpaceLength(Histogram, High): #znajduje długość spacji
                 length=0
                 number+=1
             else:length=0
-    if number<>0:    return summ/number
-    else: return 6
+    if number<>0:    return max(summ/number, (1/5)*High)
+    else: return (1/5)*High
     
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
