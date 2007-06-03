@@ -29,6 +29,7 @@ class BlockFrame(Frame) :
           line=LineFrame(new=True)
           
           line.matrix=self.matrix.crop((0,0,self.matrix.size[0],cutpoint-1))
+          line.vCut()
           self.matrix = self.matrix.crop((0,cutpoint,self.matrix.size[0],self.matrix.size[1]))
           return line
                          
@@ -60,7 +61,7 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("45c.jpg",'rb')
+     f=open("p1.jpg",'rb')
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
