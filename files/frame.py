@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 """Module docstring"""
 
-import Image, ImageEnhance
+import Image
 #import math
 
 class Frame :
@@ -27,9 +27,11 @@ class Frame :
             self.matrix=self.matrix.rotate(angle, expand=True)
             pass
 
-    def blackWhite (self) :
+    def blackWhite (self, quality='ok') :
             """Converts an image to single-band binary image"""
-            import ImageFilter
+            if quality=='ok':
+                self.matrix = ImageEnhance.Contrast(self.matrix)
+                self.matrix = self.matrix.enhance(2.5)
 ##
 ##            enhancer = ImageEnhance.Contrast(self.matrix)
 ##
@@ -37,12 +39,14 @@ class Frame :
 ##                factor = i / 4.0
 ##                enhancer.enhance(factor).convert('1').show("Contrast %f" % factor)
 ##           self.matrix=self.matrix.point(lambda i: 122.5*(math.tanh(2*i-256)+1))
-            self.matrix=self.matrix.convert('L')
+            
 ##            self.matrix=self.matrix.point(lambda i:  i+50)
 
-##            self.matrix = ImageEnhance.Contrast(self.matrix)
-##            self.matrix = self.matrix.enhance(1.5)
-            self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
+##            
+            if quality=='poor':
+                import ImageFilter
+                self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
+
             self.matrix=self.matrix.convert('1')
 
     def hLineHistogram (self, number) :
@@ -79,7 +83,7 @@ class Frame :
             self.matrix=self.matrix.resize((xSize, ySize))
             pass
     
-    def clear (self) :
+    def clear (self, quality='ok') :
             """Clears single black pixels and makes single white pixels black"""
             pix=self.matrix.load()
             for y in range(self.matrix.size[1]):
@@ -93,38 +97,40 @@ class Frame :
                     pix[x,0]=0
                     
                 for y in range(1,self.matrix.size[1]-1):
-                    i=0
-                    a=0
-                    if pix[x,y]<=128:
-                        if pix[x+1,y+1]>128: i+=1
-                        if pix[x+1,y-1]>128: i+=1
-                        if pix[x-1,y+1]>128: i+=1
-                        if pix[x-1,y-1]>128: i+=1
-                        if pix[x+1,y]>128: i+=1
-                        if pix[x-1,y]>128: i+=1
-                        if pix[x,y+1]>128: i+=1
-                        if pix[x,y-1]>128: i+=1
+                    if quality=='poor':
+                        i=0
+                        a=0
+                        if pix[x,y]<=128:
+                            if pix[x+1,y+1]>128: i+=1
+                            if pix[x+1,y-1]>128: i+=1
+                            if pix[x-1,y+1]>128: i+=1
+                            if pix[x-1,y-1]>128: i+=1
+                            if pix[x+1,y]>128: i+=1
+                            if pix[x-1,y]>128: i+=1
+                            if pix[x,y+1]>128: i+=1
+                            if pix[x,y-1]>128: i+=1
 
-                        if i>=6: pix[x,y]=255
+                            if i>=6: pix[x,y]=255
 
-                    if pix[x,y]>128:
-                        if pix[x+1,y+1]<=128: a+=1
-                        if pix[x+1,y-1]<=128: a+=1
-                        if pix[x-1,y+1]<=128: a+=1
-                        if pix[x-1,y-1]<=128:  a+=1
-                        
-                        if pix[x+1,y]<=128: a+=1
-                        if pix[x-1,y]<=128: a+=1
-                        if pix[x,y+1]<=128: a+=1
-                        if pix[x,y-1]<=128: a+=1
-##
-                        if a>=6: pix[x,y]=0
-##                        
-####                    if pix[x,y]<=128 and pix[x+1,y]>128 and pix[x-1,y]>128 and pix[x,y+1]>128 and pix[x,y-1]>128:
-####                        pix[x,y]=255
-##                    if pix[x,y]>128 and pix[x+1,y]<=128 and pix[x-1,y]<=128 and pix[x,y+1]<=128 and pix[x,y-1]<=128:
-##                        pix[x,y]=0
-                        
+                        if pix[x,y]>128:
+                            if pix[x+1,y+1]<=128: a+=1
+                            if pix[x+1,y-1]<=128: a+=1
+                            if pix[x-1,y+1]<=128: a+=1
+                            if pix[x-1,y-1]<=128:  a+=1
+                            
+                            if pix[x+1,y]<=128: a+=1
+                            if pix[x-1,y]<=128: a+=1
+                            if pix[x,y+1]<=128: a+=1
+                            if pix[x,y-1]<=128: a+=1
+    
+                            if a>=6: pix[x,y]=0
+
+                    if quality=='ok':                        
+                        if pix[x,y]<=128 and pix[x+1,y]>128 and pix[x-1,y]>128 and pix[x,y+1]>128 and pix[x,y-1]>128:
+                            pix[x,y]=255
+                        if pix[x,y]>128 and pix[x+1,y]<=128 and pix[x-1,y]<=128 and pix[x,y+1]<=128 and pix[x,y-1]<=128:
+                            pix[x,y]=0
+                            
                 if pix[x,self.matrix.size[1]-1]<=128 and pix[x+1,self.matrix.size[1]-1]>128 and pix[x-1,self.matrix.size[1]-1]>128 and pix[x,self.matrix.size[1]-2]>128:
                     pix[x,self.matrix.size[1]-1]=255
                 if pix[x,self.matrix.size[1]-1]>128 and pix[x+1,self.matrix.size[1]-1]<=128 and pix[x-1,self.matrix.size[1]-1]<=128 and pix[x,self.matrix.size[1]-2]<=128:
@@ -225,14 +231,14 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("200boldy1.jpg",'rb')
+    f=open("p1.jpg",'rb')
     im=Frame(f)
     im.blackWhite()
 ##    print list(im.matrix.getdata())
 ##    im.clear()
 ##    im.showPicture()
 ##    im.clear()
-    im.clear()
+##    im.clear()
 ####    print im.getSize()
 ####    im=im.upperCut()
 ##    im=im.vCut()
