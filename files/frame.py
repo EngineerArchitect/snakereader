@@ -30,6 +30,7 @@ class Frame :
     def blackWhite (self, quality='ok') :
             """Converts an image to single-band binary image"""
             if quality=='ok':
+                import ImageEnhance
                 self.matrix = ImageEnhance.Contrast(self.matrix)
                 self.matrix = self.matrix.enhance(2.5)
 ##
@@ -231,7 +232,7 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("p1.jpg",'rb')
+    f=open("a.bmp",'rb')
     im=Frame(f)
     im.blackWhite()
 ##    print list(im.matrix.getdata())
