@@ -44,8 +44,14 @@ class Control:
 	def blockSegmentation(self,picture,listOfOptions=[]):
 		"""segmentation of a block of text into list of lines given as LineFrame objects"""
 		block=BlockFrame(picture)
-		block.blackWhite()
-		block.clear()
+		if listOfOptions[2]=='poor':
+                
+		        block.blackWhite('poor')
+		        block.clear('poor')
+		else:
+		        block.blackWhite()
+		        block.clear()
+			
 		lines=block.extractLines()
 		return lines
 	def characterSegmentation(self,LineFrame,listOfOptions):
