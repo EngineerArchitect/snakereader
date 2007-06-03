@@ -31,7 +31,7 @@ class Control:
 	def textRecognition(self,pic): # jeszcze bez wyjatkow
 		"""main class method; uses methods below to cut picture file to lines and to characters, and to recognize characters"""
 		text=""
-		mainList=self.blockSegmentation(pic,[self.options[1],self.options[2]])
+		mainList=self.blockSegmentation(pic,[self.options[1],self.options[2],self.options[3]])
 		dictionaryObject=Dictionary(self.options[0])
 		for line in mainList:
 			for word in self.characterSegmentation(line,[]):
@@ -60,13 +60,13 @@ class Control:
 		checkword=''
 #        [[(a,23),(b,11),(c,8)],[(d,69),(e,44),(f,29)],[(g,96),(h,77),(i,63)]]
 		
-		#buduje slowo z najlepszych i sprawdza je
-#		for i in range(0,len(tupleListList)):
-#			checkword=checkword+tupleListList[i][0][0]
+		#buduje slowo z najlepszych i sprawdza je'''
+		for i in range(0,len(tupleListList)):
+			checkword=checkword+tupleListList[i][0][0]
 ##        if dictionaryObject.UniversalDictStruct.has(checkword)==True:
-#		return checkword
+		return checkword
 
-		ListListList=dictionaryObject.tupleListListToListListList(tupleListList)
+		'''ListListList=dictionaryObject.tupleListListToListListList(tupleListList)
 		word=dictionaryObject.normalize(tupleListList)
 		wordpos=dictionaryObject.bestPos(word)
 		
@@ -123,7 +123,7 @@ class Control:
 ##            stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
 ##            #dictionaryObject.StarStruct.has(wordpos)
 ##            #costam dalej
-##            return checkword
+##            return checkword'''
 
 if __name__ == "__main__":
 	a=Control()
