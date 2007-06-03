@@ -27,6 +27,8 @@ class CommandLine(Control) :
                 self.options[1] = sys.argv[i+1]
             if sys.argv[i] == '-r':
                 self.options[2] = sys.argv[i+1]
+            if sys.argv[i] == '-q':
+                self.options[3] = sys.argv[i+1]
 
 #-----------------GUI----------------#
 
@@ -269,8 +271,10 @@ class MyFrame(wx.Frame):
 # end of class MyFrame
 #-----------------GUI----------------#
                 
-sys.argv.append('a.bmp')
+sys.argv.append('l1.jpg')
 sys.argv.append('a.txt')
+sys.argv.append('-q')
+sys.argv.append('poor')
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()

@@ -18,7 +18,7 @@ class NeuralNetwork :
 		self.beta,self.alfamatrix,self.betamatrix,self.K,self.M, self.N,self.eta,self.offList=beta,array(alfamatrix),array(betamatrix),K+1,M,N,eta,offList ##parameters assigment
 		for i,j in self.offList: self.betamatrix[i,j]=0 ##turning down some links
 	
-	def __rand(self,n): return [random.random()*5 for i in range(n)] ##generates random sequence (list)
+	def __rand(self,n): return [(2*random.random()-1)*5 for i in range(n)] ##generates random sequence (list)
 	
 	def activationFunction (self, x) :  return 1/(1+math.exp(-self.beta*x)) ##logistic function
 	
@@ -58,7 +58,7 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 	def g(n,x): return ((x+1)%2)
 	
 	neur=NeuralNetwork(10,20,4,[(1,1),(2,2),(3,3)])
-	for n in range(1,5000):
+	for n in range(1,100):
 		l=[f(n,float(x)) for x in range(2,12)]
 		l2=[g(n,float(x)) for x in range(2,12)]
 		l3=array([1 for x in range(5)]+[0 for x in range(5)])+1/n

@@ -37,9 +37,9 @@ class LineFrame(Frame) :
                     Word=[]
                 elif char == "Enter":
                     Line.append(Word)
-                    ##for i in range(0,len(Line)):
-                      #  for j in range(0, len(Line[i])):
-                      #      Line[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
+                    for i in range(0,len(Line)):
+                        for j in range(0, len(Line[i])):
+                            Line[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
                     return Line
             else: # zwrócono obiekt typu znak
                 Word.append(char)
