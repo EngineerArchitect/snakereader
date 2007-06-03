@@ -50,7 +50,6 @@ ID_OPT_B = 54
 
 class Options(wx.Frame):
     def __init__(self, *args, **kwds):
-        # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.label_4 = wx.StaticText(self, -1, "")
@@ -66,19 +65,15 @@ class Options(wx.Frame):
 
         self.__set_properties()
         self.__do_layout()
-        # end wxGlade
 
     def __set_properties(self):
-        # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Options")
         self.SetSize((300, 200))
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
         self.radio_box_1.SetSelection(0)
-        # end wxGlade
 
     def __do_layout(self):
-        # begin wxGlade: MyFrame.__do_layout
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         sizer_10 = wx.BoxSizer(wx.VERTICAL)
         sizer_13 = wx.BoxSizer(wx.VERTICAL)
@@ -106,14 +101,10 @@ class Options(wx.Frame):
         sizer_1.Add(sizer_10, 1, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
         self.Layout()
-        # end wxGlade
-
-# end of class MyFrame
 
 
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
-        # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         
@@ -156,7 +147,6 @@ class MyFrame(wx.Frame):
         self.__do_layout(self.bitmap)
 
         self.Bind(wx.EVT_MENU, self.a, id=11)
-        # end wxGlade
 
 
 ### moj kod
@@ -187,7 +177,7 @@ class MyFrame(wx.Frame):
             self.filename=dialog.GetFilename()
             self.dirname=dialog.GetDirectory()
             self.picture = interface.inputFile(unicode.encode(self.dirname+"\\"+self.filename))
-            #self.bitmap = wx.StaticBitmap(self, -1, wx.Bitmap(unicode.encode(self.dirname+"\\"+self.filename), wx.BITMAP_TYPE_ANY))
+            #self.bitmap=wx.StaticBitmap(self, -1, wx.Bitmap(unicode.encode(self.dirname+"\\"+self.filename), wx.BITMAP_TYPE_ANY))
         dialog.Destroy()
 
     #def OnSave(self,e):
@@ -203,13 +193,10 @@ class MyFrame(wx.Frame):
         optionsWindow.Show()
 
     def OnRecog(self,e):
-        dialog1 = wx.MessageDialog(self, "Working...", "Working...", wx.ICON_EXCLAMATION)
-        dialog1.ShowModal()
         try:
             self.text=interface.textRecognition(self.picture)
         except IOError, details:
             print "Error:", details
-        dialog1.Destroy()
         dialog = wx.MessageDialog(self, str(self.text), "Text", wx.OK)
         dialog.ShowModal()
         dialog.Destroy()
@@ -244,7 +231,6 @@ class MyFrame(wx.Frame):
 ### end of moj kod
 
     def __set_properties(self):
-        # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Snakereader")
         _icon = wx.EmptyIcon()
         _icon.CopyFromBitmap(wx.Bitmap(".//files//Snake.bmp", wx.BITMAP_TYPE_ANY))
@@ -253,22 +239,18 @@ class MyFrame(wx.Frame):
         self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
         self.bitmap.SetMinSize((356, 581))
-        # end wxGlade
 
     def __do_layout(self, bitmap):
-        # begin wxGlade: MyFrame.__do_layout
         sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_1.Add(self.bitmap, 0, 0, 0)
         sizer_1.Add(self.text_ctrl_1, 0, 0, 0)
         self.SetSizer(sizer_1)
         self.Layout()
-        # end wxGlade
 
     def a(self, event): # wxGlade: MyFrame.<event_handler>
         print "Event handler `a' not implemented!"
         event.Skip()
 
-# end of class MyFrame
 #-----------------GUI----------------#
                 
 #sys.argv.append('l1.jpg')
