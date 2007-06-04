@@ -73,12 +73,16 @@ class Dictionary :
 
 	def permittedWords (struktura,miejsce,litera) :
 		"""method docstring"""
+		j=-1
 		for i in range(0,len(struktura[miejsce])):
 			if struktura[miejsce][i][0]==litera:
 				j=i
-		wyrazy=struktura[miejsce][j][1]
-		wyrazy.sort()
-		return wyrazy
+		if j>-1:
+                        wyrazy=struktura[miejsce][j][1]
+                        wyrazy.sort()
+                if j=-1:
+                        wyrazy=[]
+                return wyrazy
 
 	def has (self, word) :
 		"""method docstring"""

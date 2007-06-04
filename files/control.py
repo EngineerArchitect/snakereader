@@ -44,14 +44,8 @@ class Control:
 	def blockSegmentation(self,picture,listOfOptions=[]):
 		"""segmentation of a block of text into list of lines given as LineFrame objects"""
 		block=BlockFrame(picture)
-		if listOfOptions[2]=='poor':
-                
-		        block.blackWhite('poor')
-		        block.clear('poor')
-		else:
-		        block.blackWhite()
-		        block.clear()
-			
+		block.blackWhite()
+		block.clear()
 		lines=block.extractLines()
 		return lines
 	def characterSegmentation(self,LineFrame,listOfOptions):
@@ -71,65 +65,88 @@ class Control:
 			checkword=checkword+tupleListList[i][0][0]
 ##        if dictionaryObject.UniversalDictStruct.has(checkword)==True:
 		return checkword
+##
+##		ListListList=dictionaryObject.tupleListListToListListList(tupleListList)
+##		word=dictionaryObject.normalize(tupleListList)
+##		wordpos=dictionaryObject.bestPos(word)
+##		
+##		filenames=[]
+##		palki=''
+##		for i in range(wordpos[0],wordpos[1]-1):
+##			palki=palki+'_'
+##		filenames.append("dict/slo/"+word[wordpos[0]][0][0]+palki+word[wordpos[1]][0][0]+".txt")
+##		#plik=dictionaryObject.loadFiles(filenames)
+##		plik=filenames[0]
+##		start=wordpos[0]
+##		wordpos.remove(wordpos[0])
+##		wordpos.remove(wordpos[1])
+##		
+##		star=dictionaryObject.createDataStructure(plik)
+##		permitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]][0][0])
+##		wordpos.remove(wordpos[0])
+####                while True:
+####                        for i in range(0,len(word[wordpos[0]]):
+####                                l=-1
+####                		for j in range(0,len(star[99-start+wordpos[0]])):
+####                                       if word[wordpos[0]][i][0]==star[99-start+wordpos[0]][j][0]:
+####                                               l=j
+####                                if l>-1:
+####                                       break
+####                        if l=j:
+####                                #koniec swiata
+####                                       
+####                                       
+####                                
+####                        pass
+##
+##
+##		
+##		while True:
+##			if wordpos==[]:
+##				break
+##			newpermitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]][0][0])
+##			if newpermitted==[]:
+##				break
+##			if len(newpermitted)==1:
+##                                break
+##			newnewpermitted==[]
+##			for i in range(0,len(permitted)):
+##				for j in range(0,len(newpermitted)):
+##					if permitted[i]==newpermitted[j]:
+##						newnewpermitted.append(permitted[i])
+##			permitted=newnewpermitted
+##			if permitted==[]:
+##				break
+##			wordpos.remove(wordpos[0])
+##			
+##        	if len(newpermitted)==1:#jest wspaniale
+##                        slownik=open(filename,'r')
+##                        a=-1
+##                        for linijka in slownik:
+##                                a+=1
+##                                if a==newpermitted[0]:
+##                                        return linijka[2:]
+##                                
+##		if wordpos==[]:#jest dobrze
+##			while True:
+##				slownik=open(filename,'r')
+##				a=-1
+##				for linijka in slownik:
+##					a+=1
+##					if a==permitted[i]:
+##						if len(word)==len(linijka)-2:
+##							return linijka[2:]
+##
+##		if newpermitted==[]:
+##			newpermitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]][1][0])
+##			if newpermitted==[]:
+##				newpermitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]][2][0])
+##				if newpermitted==[]:
+##					#cza sie cofnac o literke
+##					pass #tej literki w ogole nie ma w pliku na tej pozycji
+##		if permitted==[]:
+##			pass#ta literka jest w pliku ale nie pasuje do wczesniej wybranych
 
-		'''ListListList=dictionaryObject.tupleListListToListListList(tupleListList)
-		word=dictionaryObject.normalize(tupleListList)
-		wordpos=dictionaryObject.bestPos(word)
-		
-		filenames=[]
-		palki=''
-		for i in range(wordpos[0],wordpos[1]-1):
-			palki=palki+'_'
-		filenames.append(word[wordpos[0]]+palki+word[wordpos[1]])
-		#plik=dictionaryObject.loadFiles(filenames)
-		plik=filenames[0]
-		start=wordpos[0]
-		wordpos.remove(wordpos[0])
-		wordpos.remove(wordpos[1])
-		
-		star=dictionaryObject.createDataStructure(plik)
-		permitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]])
-		wordpos.remove(wordpos[0])
-		while True:
-			if wordpos==[]:
-				break
-			newpermitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]])
-			if newpermitted==[]:
-				break
-			newnewpermitted==[]
-			for i in range(0,len(permitted)):
-				for j in range(0,len(newpermitted)):
-					if permitted[i]==newpermitted[j]:
-						newnewpermitted.append(permitted[i])
-			permitted=newnewpermitted
-			if permitted==[]:
-				break
-			wordpos.remove(wordpos[0])
-			
-		if wordpos==[]:#jest super
-			while True:
-				slownik=open(filename,'r')
-				a=-1
-				for linijka in slownik:
-					a+=1
-					if a==permitted[i]:
-						if len(word)==len(linijka)-2:
-							return linijka[2:]
-
-		if newpermitted==[]:
-			pass#tej literki w ogole nie ma w pliku na tej pozycji
-		if permitted==[]:
-			pass#ta literka jest w pliku ale nie pasuje do wczesniej wybranych
-
-##        else:
-##            #robi wspaniala strukture drzewiasta
-##            word=dictionaryObject.normalize(tupleListList) #normalizuje
-##            wordpos=dictionaryObject.bestPos(word) #obliczam pozycje
-##            plik=dictionaryObject.loadFiles(wordpos) #wybieram i laduje pliki
-##            stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
-##            #dictionaryObject.StarStruct.has(wordpos)
-##            #costam dalej
-##            return checkword'''
 
 if __name__ == "__main__":
 	a=Control()
