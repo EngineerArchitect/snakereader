@@ -1,6 +1,8 @@
 # -*- coding: utf8 -*-
 """Module docstring"""
-import Image, numpy, pywt
+#import Image, numpy, #pywt
+from PIL import Image #Lisu: musiałem to dodać, bo u mnie się nie włącza
+import numpy
 from frame import Frame
 from lineframe import LineFrame
 class BlockFrame(Frame) :

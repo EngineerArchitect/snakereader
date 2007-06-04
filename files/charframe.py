@@ -2,7 +2,7 @@
 """Character recognition module"""
 from frame import Frame
 from neuralnetwork import NeuralNetwork
-import Image, ImageEnhance
+from PIL import Image, ImageEnhance# musiałem to dodać Lisu
 
 
 class CharFrame(Frame) :

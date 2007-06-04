@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 """Module docstring"""
 
-import Image
+from PIL import Image #musiałem dodać bo mi się nie włącza Lisu
 #import math
 
 class Frame :
@@ -45,7 +45,7 @@ class Frame :
 
 ##            
             if quality=='poor':
-                import ImageFilter
+                from PIL import ImageFilter #Lisu
                 self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
 
             self.matrix=self.matrix.convert('1')

@@ -2,7 +2,7 @@
 """Module for segmentation of single characters from line of text. Use Frame module, as a base, and adds methods for segmentation"""
 
 import copy
-import Image, ImageEnhance
+from PIL import Image, ImageEnhance #Lisu Musiałem to dodać
 from frame import Frame
 from charframe import CharFrame
 from neuralnetwork import NeuralNetwork
