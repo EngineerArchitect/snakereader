@@ -80,7 +80,7 @@ class Dictionary :
 		if j>-1:
                         wyrazy=struktura[miejsce][j][1]
                         wyrazy.sort()
-                if j=-1:
+                if j==-1:
                         wyrazy=[]
                 return wyrazy
 

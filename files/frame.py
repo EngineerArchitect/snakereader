@@ -232,14 +232,14 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("a.bmp",'rb')
+    f=open("l1.jpg",'rb')
     im=Frame(f)
     im.blackWhite()
 ##    print list(im.matrix.getdata())
 ##    im.clear()
 ##    im.showPicture()
 ##    im.clear()
-##    im.clear()
+    im.clear()
 ####    print im.getSize()
 ####    im=im.upperCut()
 ##    im=im.vCut()
