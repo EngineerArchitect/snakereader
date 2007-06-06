@@ -93,7 +93,7 @@ class LineFrame(Frame) :
                         Char.putPixel(el[0]-position1,el[1])
                         self.makeWhite(el[0],el[1])
                             
-                    Char.reScale(20,20)
+                    Char.reScale(30,30)
                     
                     return newPosition, Char, charLength/2
 
@@ -144,7 +144,7 @@ def reconChar(PiksList, high):
     for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
         Char.putPixel(el[0]-position,el[1])
     CharScaled=Char
-    CharScaled.reScale(20,20)
+    CharScaled.reScale(30,30)
     return PiksList, CharScaled
     #tego na razie nie testuje bo nie moge bez sieci
     """if CharScaled.getOutput():
