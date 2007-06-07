@@ -1,8 +1,8 @@
 # -*- coding: utf8 -*-
-"""Module for segmentation of single characters from line of text. Use Frame module, as a base, and adds methods for segmentation"""
+"""Module for segmentation of single characters from line of text. Use Frame class, as a base, and adds methods for segmentation"""
 
 import copy
-from PIL import Image, ImageEnhance #Lisu Musiałem to dodać
+from PIL import Image, ImageEnhance
 from frame import Frame
 from charframe import CharFrame
 from neuralnetwork import NeuralNetwork
@@ -17,98 +17,98 @@ class LineFrame(Frame) :
         else:
             self.matrix=Image.open(f)
 
-    def extractCharacters(self): #główna metoda wywołujaca pozostałe
+    def extractCharacters(self):
         """Steering method for character segmentation. Extract all single characters from line of text (LineFrame object).
-        Returns list of lists of CharFrame objets, where each CharFrame object is in size of 20x20 and contain single character.
+        Returns list of lists of CharFrame objets, where each CharFrame object is in size of 30x30 and contain single character.
         Ineer list correspond to single word in text"""
-        length, high=self.getSize()
+        
+        length, high=self.getSize() ##geting size of LineFrame object - high and length
         vHisto = self.vLinesHistogram()
-        spaceLength = findSpaceLength(vHisto,high)
-        position = 0
-        Line=[]
-        Word=[]
+        spaceLength = findSpaceLength(vHisto,high) ##finding of expected length of Space in line
+        position = 0 ##position, from where findChar is serching for character
+        Line=[] ##list of words in line
+        Word=[] ##list of characters in word
         correction=0
         End = False
-        while not End: #dopuki nie doszliśmy do końca linijki wyszukujemy znaków
+        while not End: ##while not End of the line, search for characters
             position, char, correction = self.findChar(position, spaceLength+correction)
-            if type(char) == str: #sprawdzenie czy nadano komunikat, czy zwrócono obiekt
-                if char == "Space":
+            if type(char) == str: #check if returned CharFrame object or repor
+                if char == "Space": #Space was finded in line, end of word, Word list append to Line list, and new Word list started
                     Line.append(Word)
                     Word=[]
-                elif char == "Enter":
+                elif char == "Enter": ##Finden end of line, Wor list closed and appened to Line list, end of method, returned Line list
                     Line.append(Word)
                     for i in range(0,len(Line)):
                         for j in range(0, len(Line[i])):
                             Line[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
                     return Line
-            else: # zwrócono obiekt typu znak
+            else: ## Character finden in line, append CharFrame object to Word list
                 Word.append(char)
                 
 
     def findChar(self, position, spaceLength ):
         """Method find first single character in text starting from given position, finds Spaces too.
-        Returns CharFrame object in size of 20x20 which contain single character, and position, where it end to search."""
-        leer=0 # int, licznik pustych kolumn
-        Queue=[] #kolejka, bedzie słuzyć do wyszukiwania i przechowywania sąsiadów
-        PiksList=[] #lista bedzie zawireała wynikową liste pikseli.
+        Returns CharFrame object in size of 30x30 which contain single character, and position, where it end to search."""
+        leer=0 ## numeator of empty column
+        Queue=[] ##this will help in serching for neighbours of pixels
+        PiksList=[] ##list of balck piksels, of with consist the charakter
         length, high = self.getSize()
  
-        while (position < length and self.vLineHistogram(position)==0):
+        while (position < length and self.vLineHistogram(position)==0): #serching for a first not empty line, for given position
             position+=1
             leer+=1
-        if position == length: # sprawdamy czy nie mamy przypadkiem do czynienia ze spacja lub enterem
+        if position == length: ## check if it is Space or it is End of line
             return position, "Enter", 0
         elif leer>=spaceLength:
             return position, "Space", 0
         else:
-            for i in range(0,high): #wpisujemy wszystkie piksele z pierwszej czarnej linijki do kolejki
-                if self.getPixel(position, i)==0: #sprawdzić czy na pewno taka kolejność współżędnych
+            for i in range(0,high): ##extracting all black pixels from this line
+                if self.getPixel(position, i)==0:
                     Queue.append((position, i))
                     PiksList.append((position, i))
 
             while len(Queue)>0:
-                Piksel=Queue.pop(0) #krotka zawierająca współrzędne piksela
+                Piksel=Queue.pop(0) ##geting firs element from Queue
                 neighbourhood=[(Piksel[0]-1, Piksel[1]+1),(Piksel[0]-1, Piksel[1]),(Piksel[0]-1, Piksel[1]-1),(Piksel[0], Piksel[1]+1),(Piksel[0], Piksel[1]-1),(Piksel[0]+1, Piksel[1]+1),(Piksel[0]+1, Piksel[1]),(Piksel[0]+1, Piksel[1]-1)]
-                #to co wyzej to lista współrzędnych sąsiadów Piksela
+                ##to co wyzej to lista współrzędnych sąsiadów Piksela
 
-                for neighbour in neighbourhood: #sprawdzamy sąsiedztwo
+                for neighbour in neighbourhood: ##cheking neighbourhood of each pixel
                     if not(neighbour in PiksList) and (neighbour[0] in range(0,length)) and (neighbour[1] in range(0,high)) and self.getPixel(neighbour[0],neighbour[1])==0:
                         Queue.append(neighbour)
                         PiksList.append(neighbour)
             
-            PiksList.sort() # soruje liste w ten sposób, że najpierw piksele z pierwszej kolumny potem z drugiej itd
+            PiksList.sort() ##sorts list with number of column
 
             
-            PiksList=self.addHigherPiks(PiksList) #dodajemy wszystkie piksele nad grupą
+            PiksList=self.addHigherPiks(PiksList) ##adds all piksel over finden pixels
             PiksList.sort()
             position1,High1=PiksList[0]
-            position2,High2=PiksList[len(PiksList)-1]  # wten sposób uzyskamy numery skrajnych kolumn
+            position2,High2=PiksList[len(PiksList)-1]  ## geting number of smalest and biggest column in group
             charLength=position2-position1
-            if len(PiksList)>5:
-                if charLength<high: #sprawdzamy czy nie wykryliśmy sklejki dłuższej niż długość kafelki
-                    newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
-                    Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać
+            if len(PiksList)>5: ##checkin if there are more then 5 piksels in group to eliminate case, when there are single pixels not eliminated by initial fomating
+                if charLength<high: ##check if the length of finden group of pixels isn't bigger then length of tile
+                    newPosition= position1+(charLength/2) ##new position in the center of finden char to eliminate case, when one char is over the second
+                    Char=CharFrame(high,high) ##create new CrarFrame object
     
-                    for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
+                    for el in PiksList: ##making all pixels in PiksList black in ChatFrame object and white in self(LineFrame object)
                         Char.putPixel(el[0]-position1,el[1])
                         self.makeWhite(el[0],el[1])
                             
-                    Char.reScale(30,30)
+                    Char.reScale(30,30) #scaling CharFrame to the ening size
                     
                     return newPosition, Char, charLength/2
 
-                else: #czyli gdy wykryto za długą sklejke
-                    PiksList, Char = reconChar(PiksList,high)
+                else: ##length of goup of pixels is too big
+                    PiksList, Char = reconChar(PiksList,high) ## finding where to divide group of pixels
                     for Piks in PiksList:
                         self.makeWhite(Piks[0],Piks[1])
                     position1,High1=PiksList[0]
-                    position2,High2=PiksList[len(PiksList)-1]  # wten sposób uzyskamy numery skrajnych kolumn
+                    position2,High2=PiksList[len(PiksList)-1]  ## geting number of smalest and biggest column in group
                     charLength=position2-position1
-                    newPosition= position1+(charLength/2) #nowa pozycja w środku wykrytego znaku by wyeliminować przypadek gdy jeden znak nakryje drugi
-
+                    newPosition= position1+(charLength/2) ##new position in the center of finden char to eliminate case, when one char is over the second
                     return newPosition, Char, charLength/2
-            else:
-                for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
+            else: ##if there is less then 5 pixels in group
+                for el in PiksList: ##making all pixels in PiksList white in self(LineFrame object)
                         self.makeWhite(el[0],el[1])
                 newPosition= position1+(charLength/2)
                 return newPosition, "None", charLength/2
@@ -117,36 +117,35 @@ class LineFrame(Frame) :
         """Add all pixels over already segmented character, this adds dots to character"""
         position1,High1=PiksList[0]
         position2,High2=PiksList[len(PiksList)-1]
-        for kol in range(position1, position2): #dla każedj kolumny sprawdzamy piksele nad znalezionymi
+        for kol in range(position1, position2): ##for each column checking all pixels over finden group
             line=0
             while not((kol, line) in PiksList):
-                if self.getPixel(kol,line)==0: #jeżeli czarne, to dodajemy je do listy
+                if self.getPixel(kol,line)==0: ##if they are black add them to PiksList
                     PiksList.append((kol,line))
                 line+=1
-        PiksList.sort()# na koniec sortujemy liste ponownie by miała taki sam format jak na wejsciu, przyda sie to zaraz w findChar
+        PiksList.sort()## at the end sort the PiksList with number of column
         return PiksList
 
-#######################################################################################################################
-#tylko że to są funkcje a nie metody, oczywiście moge z nich zrobic metody, ale nie wiem, czy to ma sens
+######################################################################################################################
 
 def reconChar(PiksList, high):
     """If segmented character is too long, ask NeuralNetwork where to divide it"""
     position, h=PiksList[0]
     NewPiksList=[]
     
-    for piks in PiksList: #usówamy wszystkie piksele które nie mieszczą sie w kafelce
+    for piks in PiksList: ##delete all pixels that can not be in tile
         if piks[0]<position+high-1:
             NewPiksList.append(piks)
             
     PiksList=NewPiksList
     
-    Char=CharFrame(high,high) #tworzymy obiekt typu Charframe, ale jeszcze nie wiem jak go wywołać      
-    for el in PiksList: #jeśli nie wymyślimy efektywniejszego sposobu
+    Char=CharFrame(high,high) ##create new CharFrame object       
+    for el in PiksList: 
         Char.putPixel(el[0]-position,el[1])
     CharScaled=Char
-    CharScaled.reScale(30,30)
+    CharScaled.reScale(30,30) ##skale CharFrame object to the ending size
     return PiksList, CharScaled
-    #tego na razie nie testuje bo nie moge bez sieci
+    ##this is not testet yet because of not working neuralNetwork
     """if CharScaled.getOutput():
         return PiksList, CharScaled
     else:
@@ -170,8 +169,8 @@ def reconChar(PiksList, high):
                     return PiksListPro, CharProSlaled
         return PiksList, Char # gdyby to nić nie dało by zwrócić cokolwiek"""
 
-def findSpaceLength(Histogram, High): #znajduje długość spacji
-    """function search expected length of space in line, based on empty columns in histogram"""
+def findSpaceLength(Histogram, High): 
+    """function search expected length of space in line, based on empty columns in histogram, its a simple arithmetic mean of length of empty space"""
     summ=0
     length=0
     number=0
@@ -184,7 +183,7 @@ def findSpaceLength(Histogram, High): #znajduje długość spacji
                 length=0
                 number+=1
             else:length=0
-    if number<>0:    return max(summ/number, (1/5)*High)
+    if number<>0:    return max(summ/number, (1/5)*High) ## in a case if there is no space in line
     else: return (1/5)*High
     
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
