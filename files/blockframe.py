@@ -11,14 +11,25 @@ class BlockFrame(Frame) :
 ##          pass
      def findLevel (self) :
           """Finds the skew of the text"""
-          data = numpy.array(list(self.matrix.getdata()))
-          data.shape = (self.matrix.size[1], self.matrix.size[0])
+          a=list(self.matrix.getdata())
+          for i in range(len(a)):
+               if a[i]==255: a[i]=0
+               elif a[i]==0: a[i]=1
           
-          data = pywt.dwt2(data,'Haar')
-          return data
+          data = numpy.array(a)
+          data.shape = (self.matrix.size[1], self.matrix.size[0])
+          print len(sum(data))
+          wave = pywt.dwt2(data,'Haar')
+          cent = self.centroid(data)
+          return cent
      def centroid(self,data):
-          """Finds the centroid of given set of data"""
-
+          """Finds the centroid of given set of 2D data"""
+          cent=[0,0]
+          summa=0
+          for x in range(data.shape[0]):
+               summa+=x*sum(data[x])
+          cent[0]=summa/sum(sum(data))
+          return cent
      def extractLine (self):
           """returns one line from the text"""
           self.hCut()
@@ -33,6 +44,7 @@ class BlockFrame(Frame) :
           line.matrix=self.matrix.crop((0,0,self.matrix.size[0],cutpoint-1))
           line.vCut()
           self.matrix = self.matrix.crop((0,cutpoint,self.matrix.size[0],self.matrix.size[1]))
+          
           return line
                          
           
@@ -51,9 +63,10 @@ class BlockFrame(Frame) :
           i=0
           while self.matrix.size[1]!=0:
                a=self.extractLine()
-               lines.append(a)
-               a.matrix.save(str(i)+'.BMP')
-               i+=1
+               if a.matrix.size[1]>10:
+                    lines.append(a)
+                    a.matrix.save(str(i)+'.BMP')
+                    i+=1
 ##               print self.matrix.size[1]
           return lines
           pass
@@ -63,22 +76,24 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("p1.jpg",'rb')
+     f=open("learn1.jpg",'rb')
      im=BlockFrame(f)
      im.blackWhite()
      im.clear()
      im.hCut()
-     im.vCut()     
+     im.vCut()
      im.showPicture()
-     print im.findLevel()
+     l=im.extractLines()
+     
+     
 ##     a=im.matrix.tobitmap()
 ##     
-##     print a
+     
 ##     x=Image.fromstring('1',(896,253),a)
 ##     x.show()
 ##     print a[2398]
 ####     im.clear()
-     l=im.extractLines()
+##     l=im.extractLines()
 
 ######     
 ####        

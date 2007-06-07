@@ -141,7 +141,7 @@ class Frame :
     
     def leftCut(self) :
         """Cuts the image from the left to the beginning of text"""
-        l_cut_point=0
+        l_cutpoint=0
         for i in range(self.matrix.size[0]-1):
                 if self.vLineHistogram(i) >= 2: #0.001*self.matrix.size[1]:
                     l_cutpoint = i
