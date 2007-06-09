@@ -59,6 +59,7 @@ class Options(wx.Frame):
         wx.Frame.__init__(self, *args, **kwds)
         self.label_4 = wx.StaticText(self, -1, "")
         self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=dicList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_2 = wx.RadioBox(self, -1, "Choose quality", choices=["good","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
         self.label_5 = wx.StaticText(self, -1, "Technical data:")
         self.label_6 = wx.StaticText(self, -1, "Font size   ")
@@ -77,6 +78,10 @@ class Options(wx.Frame):
         interface.options[0] = interface.dictionaries[self.radio_box_1.GetSelection()]
         interface.options[1] = self.text_ctrl_3.GetValue()
         interface.options[2] = self.text_ctrl_4.GetValue()
+        if self.radio_box_2.GetSelection()==0:
+            interface.options[3] = "good"
+        else:
+            interface.options[3] = "poor"
         self.Close(True)
 
     def OnCancel(self, e = None):
@@ -85,9 +90,10 @@ class Options(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Options")
-        self.SetSize((300, 400))
+        self.SetSize((300, 264))
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
+        self.radio_box_1.SetSelection(0)
         self.radio_box_1.SetSelection(0)
         # end wxGlade
 
@@ -103,7 +109,8 @@ class Options(wx.Frame):
         sizer_12 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_11.Add(self.label_4, 0, 0, 0)
         sizer_12.Add(self.radio_box_1, 0, wx.SHAPED, 0)
-        sizer_11.Add(sizer_12, 200, wx.EXPAND, 0)
+        sizer_11.Add(sizer_12, 0, wx.EXPAND, 0)
+        sizer_11.Add(self.radio_box_2, 0, wx.SHAPED, 0)
         sizer_11.Add(self.static_line_1, 2, wx.EXPAND, 0)
         sizer_10.Add(sizer_11, 3, wx.EXPAND, 0)
         sizer_13.Add(self.label_5, 0, 0, 0)
@@ -129,26 +136,14 @@ class MyScroll(wx.ScrolledWindow):
         wx.ScrolledWindow.__init__(self, parent, id, wx.Point(0, 0), (350,700), wx.SUNKEN_BORDER)
         if bitmap!=None:
             self.buffer=wx.Bitmap(bitmap)
-            #wx.EVT_PAINT(self,self.OnPaint)
         else:
             self.buffer=wx.EmptyBitmap(350,700)
-            #wx.EVT_PAINT(self,self.OnClear)
         dc=wx.BufferedDC(None, self.buffer)
-        #dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
-        
-        
-        wx.EVT_PAINT(self,self.OnClear)
+
         wx.EVT_PAINT(self,self.OnPaint)
         
-        
     def OnPaint(self,event):
-        print "OnPaint"
         dc = wx.BufferedPaintDC(self,self.buffer)
-
-    def OnClear(self,event):
-        print "OnClear"
-        pass
-        dc = wx.BufferedPaintDC(self,wx.EmptyBitmap(350,700))
 
 # end of class MyScroll
 
@@ -193,7 +188,7 @@ class MyFrame(wx.Frame):
 
         
         self.bitmap = MyScroll(self)
-        #self.bitmap.OnClear()
+        
         self.static_line = wx.StaticLine(self, -1, style=wx.LI_VERTICAL)
         self.picture = None
         scroll=wx.ScrolledWindow(self,-1)
@@ -255,11 +250,11 @@ class MyFrame(wx.Frame):
                 NewH = 700
                 NewW = 700 * W / H
             self.bitmap_2 = self.bitmap_2.Scale(NewW,NewH)"""
-
             
+            self.bitmap = MyScroll(self)
+            self.__do_layout(self.bitmap)
             self.bitmap = MyScroll(self, bitmap = self.bitmap_1)
             self.__do_layout(self.bitmap)
-            #self.bitmap = wx.StaticBitmap(self, -1, wx.Bitmap(unicode.encode(self.dirname+"\\"+self.filename), wx.BITMAP_TYPE_ANY))
 
         dialog.Destroy()
 
