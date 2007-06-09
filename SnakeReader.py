@@ -35,8 +35,11 @@ class CommandLine(Control) :
 
 ID_OPEN = 11
 ID_SAVE = 12
-ID_OPT = 13
-ID_EXIT = 14
+ID_EXIT = 13
+
+ID_OPT = 21
+ID_DEF = 22
+ID_SAVE_O = 23
 
 ID_RECOG = 31
 
@@ -71,9 +74,12 @@ class Options(wx.Frame):
         # end wxGlade
         
     def OnOK(self, e = None):
-        interface.options[0] = self.radio_box_1.GetSelection()
+        interface.options[0] = interface.dictionaries[self.radio_box_1.GetSelection()]
         interface.options[1] = self.text_ctrl_3.GetValue()
         interface.options[2] = self.text_ctrl_4.GetValue()
+        self.Close(True)
+
+    def OnCancel(self, e = None):
         self.Close(True)
         
     def __set_properties(self):
@@ -96,7 +102,7 @@ class Options(wx.Frame):
         sizer_11 = wx.BoxSizer(wx.VERTICAL)
         sizer_12 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_11.Add(self.label_4, 0, 0, 0)
-        sizer_12.Add(self.radio_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
+        sizer_12.Add(self.radio_box_1, 0, wx.SHAPED, 0)
         sizer_11.Add(sizer_12, 200, wx.EXPAND, 0)
         sizer_11.Add(self.static_line_1, 2, wx.EXPAND, 0)
         sizer_10.Add(sizer_11, 3, wx.EXPAND, 0)
@@ -158,9 +164,13 @@ class MyFrame(wx.Frame):
         wxglade_tmp_menu = wx.Menu()
         wxglade_tmp_menu.Append(11, "Open", "", wx.ITEM_NORMAL)
         wxglade_tmp_menu.Append(12, "Save", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(13, "Options", "", wx.ITEM_NORMAL)
-        wxglade_tmp_menu.Append(14, "Exit", "", wx.ITEM_NORMAL)
+        wxglade_tmp_menu.Append(13, "Exit", "", wx.ITEM_NORMAL)
         self.Snakereader_menubar.Append(wxglade_tmp_menu, "File")
+        wxglade_tmp_menu = wx.Menu()
+        wxglade_tmp_menu.Append(21, "Options", "", wx.ITEM_NORMAL)
+        wxglade_tmp_menu.Append(22, "Default", "", wx.ITEM_NORMAL)
+        wxglade_tmp_menu.Append(23, "Save Options", "", wx.ITEM_NORMAL)
+        self.Snakereader_menubar.Append(wxglade_tmp_menu, "Options")
         wxglade_tmp_menu = wx.Menu()
         wxglade_tmp_menu.Append(31, "Recognize", "", wx.ITEM_NORMAL)
         self.Snakereader_menubar.Append(wxglade_tmp_menu, "Recognize")
@@ -188,7 +198,7 @@ class MyFrame(wx.Frame):
         self.picture = None
         scroll=wx.ScrolledWindow(self,-1)
         self.text = "An outcome text will be there"
-        self.text_ctrl = wx.TextCtrl(self, -1, self.text , style=wx.TE_MULTILINE)
+        self.text_ctrl = wx.TextCtrl(self, -1, self.text, style=wx.TE_MULTILINE)
         
         self.__set_properties()
         self.__do_layout(self.bitmap)
@@ -199,8 +209,10 @@ class MyFrame(wx.Frame):
 
         wx.EVT_MENU(self, ID_OPEN, self.OnOpen)
         wx.EVT_MENU(self, ID_SAVE, self.OnSave)
+        wx.EVT_MENU(self, ID_EXIT, self.OnExit)
         wx.EVT_MENU(self, ID_OPT, self.OnOpt)
-        wx.EVT_MENU(self, ID_EXIT, self.OnExit)        
+        wx.EVT_MENU(self, ID_DEF, self.OnDef)
+        wx.EVT_MENU(self, ID_SAVE_O, self.OnSaveO)
         wx.EVT_MENU(self, ID_RECOG, self.OnRecog)
         #wx.EVT_MENU(self, ID_DOCUM, self.OnDocum)
         wx.EVT_MENU(self, ID_REQUIR, self.OnRequir)
@@ -268,14 +280,22 @@ class MyFrame(wx.Frame):
         optionsWindow=Options(interface.dictionaries, None)
         optionsWindow.Show()
 
+    def OnDef(self,e):
+        interface.options=['None','','',"poor"]
+
+    def OnSaveO(self,e):
+        interface.saveOptions()
+
     def OnRecog(self,e):
+        dialog = wx.ProgressDialog("Progress", "Please, wait a while...", style = wx.PD_ELAPSED_TIME)
         try:
             self.text=interface.textRecognition(self.picture)
         except IOError, details:
             print "Error:", details
         self.text_ctrl.Destroy()
-        self.text_ctrl = wx.TextCtrl(self, 1, self.text , style=wx.TE_MULTILINE)
+        self.text_ctrl = wx.TextCtrl(self, 1, self.text, style=wx.TE_MULTILINE)
         self.__do_layout(self.bitmap)
+        dialog.Destroy()
 
     #def OnDocum(self,e):
     
@@ -308,10 +328,10 @@ class MyFrame(wx.Frame):
         _icon = wx.EmptyIcon()
         _icon.CopyFromBitmap(wx.Bitmap(".//files//Snake.bmp", wx.BITMAP_TYPE_ANY))
         self.SetIcon(_icon)
-        self.SetSize((1031, 581))
+        self.SetSize((901, 581))
         self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
-        self.text_ctrl.SetMinSize((675, 488))
+        self.text_ctrl.SetMinSize((100, 100))
         # end wxGlade
 
     def __do_layout(self, bitmap):
@@ -319,7 +339,7 @@ class MyFrame(wx.Frame):
         sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_1.Add(self.bitmap, 0, 0, 0)
         sizer_1.Add(self.static_line, 0, wx.EXPAND, 0)
-        sizer_1.Add(self.text_ctrl, 0, 0, 0)
+        sizer_1.Add(self.text_ctrl, 0, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
         self.Layout()
         # end wxGlade
@@ -360,6 +380,4 @@ if len(sys.argv)>1:
             outputFile.close()
 else:
     interface=GUI()
-    print interface.options
-    print interface.dictionaries
     interface.showInterface()
