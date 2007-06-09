@@ -1,15 +1,16 @@
 # -*- coding: utf8 -*-
-"""Module docstring"""
+"""Interface module, it enables communication beetwen user and program"""
 import sys
 import wx
 import os
 
 sys.path.append(sys.path[0]+"/files")
+
 from control import *
 class GUI(Control) :
-    """Class docstring"""
+    """Grafical interface"""
     def showInterface(self) :
-        """method docstring"""
+        """Opens grafical interface (an object wx.Frame class)"""
         app = wx.PySimpleApp(0)
         wx.InitAllImageHandlers()
         Snakereader = MyFrame(None, -1, "")
@@ -17,9 +18,9 @@ class GUI(Control) :
         Snakereader.Show()
         app.MainLoop()
 class CommandLine(Control) :
-    """Class docstring"""
+    """Program starts from command line"""
     def readCommandLine(self) :
-        """method docstring"""
+        """Reads and changes options"""
         for i in range (0, len(sys.argv)):
             if sys.argv[i] == '-d':
                 self.options[0] = sys.argv[i+1]
@@ -49,31 +50,43 @@ ID_SAVE_B = 53
 ID_OPT_B = 54
 
 class Options(wx.Frame):
-    def __init__(self, *args, **kwds):
+    def __init__(self, dicList, *args, **kwds):
+        # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.label_4 = wx.StaticText(self, -1, "")
-        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=["choice 1"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=dicList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
         self.label_5 = wx.StaticText(self, -1, "Technical data:")
-        self.label_6 = wx.StaticText(self, -1, "Size of font   ")
+        self.label_6 = wx.StaticText(self, -1, "Font size   ")
         self.text_ctrl_3 = wx.TextCtrl(self, -1, "")
-        self.label_7 = wx.StaticText(self, -1, "Resolution of a scan   ")
+        self.label_7 = wx.StaticText(self, -1, "Scan resolution   ")
         self.text_ctrl_4 = wx.TextCtrl(self, -1, "")
         self.static_line_2 = wx.StaticLine(self, -1)
         self.button_1 = wx.Button(self, -1, "OK")
-
+        self.Bind(wx.EVT_BUTTON, self.OnOK)
         self.__set_properties()
         self.__do_layout()
-
+        
+        # end wxGlade
+        
+    def OnOK(self, e = None):
+        interface.options[0] = self.radio_box_1.GetSelection()
+        interface.options[1] = self.text_ctrl_3.GetValue()
+        interface.options[2] = self.text_ctrl_4.GetValue()
+        self.Close(True)
+        
     def __set_properties(self):
+        # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Options")
-        self.SetSize((300, 200))
+        self.SetSize((300, 400))
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
         self.radio_box_1.SetSelection(0)
+        # end wxGlade
 
     def __do_layout(self):
+        # begin wxGlade: MyFrame.__do_layout
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         sizer_10 = wx.BoxSizer(wx.VERTICAL)
         sizer_13 = wx.BoxSizer(wx.VERTICAL)
@@ -84,9 +97,9 @@ class Options(wx.Frame):
         sizer_12 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_11.Add(self.label_4, 0, 0, 0)
         sizer_12.Add(self.radio_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
-        sizer_11.Add(sizer_12, 1, wx.EXPAND, 0)
-        sizer_11.Add(self.static_line_1, 0, wx.EXPAND, 0)
-        sizer_10.Add(sizer_11, 1, wx.EXPAND, 0)
+        sizer_11.Add(sizer_12, 200, wx.EXPAND, 0)
+        sizer_11.Add(self.static_line_1, 2, wx.EXPAND, 0)
+        sizer_10.Add(sizer_11, 3, wx.EXPAND, 0)
         sizer_13.Add(self.label_5, 0, 0, 0)
         grid_sizer_1.Add(self.label_6, 0, wx.ALIGN_RIGHT, 0)
         grid_sizer_1.Add(self.text_ctrl_3, 0, 0, 0)
@@ -101,10 +114,41 @@ class Options(wx.Frame):
         sizer_1.Add(sizer_10, 1, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
         self.Layout()
+        # end wxGlade
 
+# end of class Options
+
+class MyScroll(wx.ScrolledWindow):
+    def __init__(self, parent, id = -1, size = 356, bitmap=None):
+        wx.ScrolledWindow.__init__(self, parent, id, wx.Point(0, 0), (350,700), wx.SUNKEN_BORDER)
+        if bitmap!=None:
+            self.buffer=wx.Bitmap(bitmap)
+            #wx.EVT_PAINT(self,self.OnPaint)
+        else:
+            self.buffer=wx.EmptyBitmap(350,700)
+            #wx.EVT_PAINT(self,self.OnClear)
+        dc=wx.BufferedDC(None, self.buffer)
+        #dc.SetBackground(wx.Brush(self.GetBackgroundColour()))
+        
+        
+        wx.EVT_PAINT(self,self.OnClear)
+        wx.EVT_PAINT(self,self.OnPaint)
+        
+        
+    def OnPaint(self,event):
+        print "OnPaint"
+        dc = wx.BufferedPaintDC(self,self.buffer)
+
+    def OnClear(self,event):
+        print "OnClear"
+        pass
+        dc = wx.BufferedPaintDC(self,wx.EmptyBitmap(350,700))
+
+# end of class MyScroll
 
 class MyFrame(wx.Frame):
     def __init__(self, *args, **kwds):
+        # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         
@@ -136,38 +180,37 @@ class MyFrame(wx.Frame):
         self.Snakereader_toolbar.AddSeparator()
         self.Snakereader_toolbar.AddLabelTool(54, "Options", wx.Bitmap(".//files//Options.bmp", wx.BITMAP_TYPE_ANY), wx.NullBitmap, wx.ITEM_NORMAL, "Options", "")
         # Tool Bar end
-        
-        self.bitmap = wx.StaticBitmap(self, -1, wx.Bitmap(".//files//back.bmp", wx.BITMAP_TYPE_ANY))
-        self.picture = None
-        self.text = ""
 
-        self.text_ctrl_1 = wx.TextCtrl(self, -1, "outcome text")
+        
+        self.bitmap = MyScroll(self)
+        #self.bitmap.OnClear()
+        self.static_line = wx.StaticLine(self, -1, style=wx.LI_VERTICAL)
+        self.picture = None
+        scroll=wx.ScrolledWindow(self,-1)
+        self.text = "An outcome text will be there"
+        self.text_ctrl = wx.TextCtrl(self, -1, self.text , style=wx.TE_MULTILINE)
         
         self.__set_properties()
         self.__do_layout(self.bitmap)
 
         self.Bind(wx.EVT_MENU, self.a, id=11)
-
-
-### moj kod
-
+        # end wxGlade
         
 
         wx.EVT_MENU(self, ID_OPEN, self.OnOpen)
-        #wx.EVT_MENU(self, ID_SAVE, self.OnSave)
+        wx.EVT_MENU(self, ID_SAVE, self.OnSave)
         wx.EVT_MENU(self, ID_OPT, self.OnOpt)
         wx.EVT_MENU(self, ID_EXIT, self.OnExit)        
-
         wx.EVT_MENU(self, ID_RECOG, self.OnRecog)
-        
         #wx.EVT_MENU(self, ID_DOCUM, self.OnDocum)
         wx.EVT_MENU(self, ID_REQUIR, self.OnRequir)
         wx.EVT_MENU(self, ID_ABOUT, self.OnAbout)
-        #(inna wersja exit, niewazne)       self.Bind(wx.EVT_MENU, self.CloseWindow, id=ID_EXIT)
-
         wx.EVT_TOOL(self, ID_OPEN_B, self.OnOpen)
-        wx.EVT_TOOL(self, ID_OPT_B, self.OnOpt)
         wx.EVT_TOOL(self, ID_RECOG_B, self.OnRecog)
+        wx.EVT_TOOL(self, ID_SAVE_B, self.OnSave)
+        wx.EVT_TOOL(self, ID_OPT_B, self.OnOpt)
+      
+
 
     def OnOpen(self,e):
         """ Open a file"""
@@ -177,19 +220,52 @@ class MyFrame(wx.Frame):
             self.filename=dialog.GetFilename()
             self.dirname=dialog.GetDirectory()
             self.picture = interface.inputFile(unicode.encode(self.dirname+"\\"+self.filename))
-            #self.bitmap=wx.StaticBitmap(self, -1, wx.Bitmap(unicode.encode(self.dirname+"\\"+self.filename), wx.BITMAP_TYPE_ANY))
+            self.bitmap_1 = (unicode.encode(self.dirname+"\\"+self.filename))
+
+            """ tu jest skalowanie, ale na obrazku,
+                po skalowaniu otrzymujemy tez obrazek.
+                No i nie mozna go podac do MyScroll,
+                tzn. nie mozna zrobic czegos takiego:
+                self.bitmap = MyScroll(self, bitmap = self.bitmap_2)
+                nie bylo by problemu gdyby bitmap_2 byla zadana jak 7 linijek wyzej.
+                Rozwiazaniem mogloby byc zapisanie bitmap_2
+                do jakiegos pliku tymczasowego, wywolanie MyScroll
+                i zniszczenie pliku, ale to troche niefajna metoda
+                moze masz jakis pomysl??
+            
+            self.bitmap_2 = wx.Image(unicode.encode(self.dirname+"\\"+self.filename), wx.BITMAP_TYPE_ANY) 
+            W = self.bitmap_2.GetWidth()
+            H = self.bitmap_2.GetHeight()
+            if (W/H > 350/700):
+                NewW = 350
+                NewH = 350 * H / W
+            else:   
+                NewH = 700
+                NewW = 700 * W / H
+            self.bitmap_2 = self.bitmap_2.Scale(NewW,NewH)"""
+
+            
+            self.bitmap = MyScroll(self, bitmap = self.bitmap_1)
+            self.__do_layout(self.bitmap)
+            #self.bitmap = wx.StaticBitmap(self, -1, wx.Bitmap(unicode.encode(self.dirname+"\\"+self.filename), wx.BITMAP_TYPE_ANY))
+
         dialog.Destroy()
 
-    #def OnSave(self,e):
+    def OnSave(self,e):
+        self.dirname = ''
+        dialog = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.SAVE)
+        if dialog.ShowModal() == wx.ID_OK:
+            self.filename=dialog.GetFilename()+".txt"
+            self.dirname=dialog.GetDirectory()
+            outputFile = open(os.path.join(self.dirname, self.filename), "w")
+            outputFile.write(self.text_ctrl.GetValue())
+            outputFile.close()
 
     def OnExit(self,e):
         self.Close(True)
-        #(druga wersja exit, niewazne):    
-        #def CloseWindow(self,event):
-        #    self.Close()
-
+    
     def OnOpt(self,e):
-        optionsWindow=Options(None)
+        optionsWindow=Options(interface.dictionaries, None)
         optionsWindow.Show()
 
     def OnRecog(self,e):
@@ -197,9 +273,9 @@ class MyFrame(wx.Frame):
             self.text=interface.textRecognition(self.picture)
         except IOError, details:
             print "Error:", details
-        dialog = wx.MessageDialog(self, str(self.text), "Text", wx.OK)
-        dialog.ShowModal()
-        dialog.Destroy()
+        self.text_ctrl.Destroy()
+        self.text_ctrl = wx.TextCtrl(self, 1, self.text , style=wx.TE_MULTILINE)
+        self.__do_layout(self.bitmap)
 
     #def OnDocum(self,e):
     
@@ -223,35 +299,44 @@ class MyFrame(wx.Frame):
                                   "created by students of Wroclaw University of Technology \n\n"
                                   "Wroclaw, 2007","About", wx.OK)
         dialog.ShowModal()
-        dialog.Destroy()
-        #self.components.ID_RECOG.enabled = False
-                             
+        dialog.Destroy()     
     
-        
-### end of moj kod
 
     def __set_properties(self):
+        # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Snakereader")
         _icon = wx.EmptyIcon()
         _icon.CopyFromBitmap(wx.Bitmap(".//files//Snake.bmp", wx.BITMAP_TYPE_ANY))
         self.SetIcon(_icon)
-        self.SetSize((712, 581))
+        self.SetSize((1031, 581))
         self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
-        self.bitmap.SetMinSize((356, 581))
+        self.text_ctrl.SetMinSize((675, 488))
+        # end wxGlade
 
     def __do_layout(self, bitmap):
+        # begin wxGlade: MyFrame.__do_layout
         sizer_1 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_1.Add(self.bitmap, 0, 0, 0)
-        sizer_1.Add(self.text_ctrl_1, 0, 0, 0)
+        sizer_1.Add(self.static_line, 0, wx.EXPAND, 0)
+        sizer_1.Add(self.text_ctrl, 0, 0, 0)
         self.SetSizer(sizer_1)
         self.Layout()
+        # end wxGlade
 
     def a(self, event): # wxGlade: MyFrame.<event_handler>
         print "Event handler `a' not implemented!"
         event.Skip()
 
-#-----------------GUI----------------#
+# end of class MyFrame
+
+
+
+
+
+
+
+#-----------------INTERFACE----------------#
                 
 #sys.argv.append('l1.jpg')
 #sys.argv.append('a.txt')
@@ -275,4 +360,6 @@ if len(sys.argv)>1:
             outputFile.close()
 else:
     interface=GUI()
+    print interface.options
+    print interface.dictionaries
     interface.showInterface()
