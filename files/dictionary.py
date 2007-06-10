@@ -121,7 +121,6 @@ class Dictionary :
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
 
-
 	tupleListList=[
 		[('s',93),('b',71),('c',68)],
 		[('p',69),('a',44),('f',29)],
@@ -170,10 +169,6 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 
 	wyraz=''
 
-
-
-
-
 	while wordpos<>[]:
 		print "wordpos: "
 		print wordpos
@@ -182,8 +177,7 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 		newpermitted=[]
 		for i in range(0,3):
 			if newpermitted<>[]:
-				break
-			
+				break			
 			for j in range(0,len(star[99-start+wordpos[0]])):
 				if word[wordpos[0]][i][0]==star[99-start+wordpos[0]][j][0]:
 					newpermitted=dictionaryObject.permittedWords(star,99-start+wordpos[0],word[wordpos[0]][0][0])
@@ -205,7 +199,6 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 					print linijka[2:]
 					wyraz=linijka[2:]
 					wordpos=[]
-
 		else:
 			print "jest kilka propozycji"
 			newnewpermitted=[]
@@ -232,58 +225,3 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 				print "normalka"
 				permitted=newnewpermitted
 				wordpos.remove(wordpos[0])
-
-
-
-
-	
-##	while wordpos<>[]:
-##	      newpermitted=[]
-##	      for i in range(0,3):
-##		      for j in range(0,len(star[99-start+wordpos[0]])):
-##			      if word[wordpos[0]][i][0]==star[99-start+wordpos[0]][j][0]:
-##				      newpermitted=dictionaryObject.permittedWords(star,99-start+wordpos[0],word[wordpos[0]][0][0])
-##				      break
-##			      
-##	      if newpermitted==[]:
-##		      #wszystkich trzech nie ma w strukturze
-##		      wordpos.remove(wordpos[0])
-##		      
-##	      elif len(newpermitted)==1:
-##		      #jest jedno słowo z tą literką w pliku na tym miejscu (super)
-##		      slownik=open(filename,'r')
-##		      a=-1
-##		      for linijka in slownik:
-##			      a+=1
-##			      if a==newpermitted[0]:
-##				      print linijka[2:]
-##				      wyraz=linijka[2:]
-##				      wordpos=[]
-##
-##	      else:
-##		      #jest kilka propozycji
-##		      newnewpermitted=[]
-##		      for i in range(0,len(permitted)):
-##			      for j in range(0,len(newpermitted)):
-##				      if permitted[i]==newpermitted[j]:
-##					      newnewpermitted.append(permitted[i])
-##		      if newnewpermitted==[]:
-##			      #ta literka jest w pliku ale nie pasuje do wczesniej wybranych
-##			      wordpos.remove(wordpos[0])
-##
-##		      elif len(newnewpermitted)==1:
-##			      #jest jedno słowo z tą literką w pliku na tym miejscu (super)
-##			      slownik=open(filename,'r')
-##			      a=-1
-##			      for linijka in slownik:
-##				      a+=1
-##				      if a==newnewpermitted[0]:
-##					      print linijka[2:]
-##					      wyraz=linijka[2:]
-##					      wordpos=[]
-##					      
-##		      else:
-##			      permitted=newnewpermitted
-##			      wordpos.remove(wordpos[0])
-
-#	print permitted

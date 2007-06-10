@@ -75,64 +75,7 @@ class Control:
 ##        if dictionaryObject.UniversalDictStruct.has(checkword)==True:
                 return checkword
 
-                '''ListListList=dictionaryObject.tupleListListToListListList(tupleListList)
-                word=dictionaryObject.normalize(tupleListList)
-                wordpos=dictionaryObject.bestPos(word)
 
-                filenames=[]
-                palki=''
-                for i in range(wordpos[0],wordpos[1]-1):
-                        palki=palki+'_'
-                filenames.append(word[wordpos[0]]+palki+word[wordpos[1]])
-                #plik=dictionaryObject.loadFiles(filenames)
-                plik=filenames[0]
-                start=wordpos[0]
-                wordpos.remove(wordpos[0])
-                wordpos.remove(wordpos[1])
-
-                star=dictionaryObject.createDataStructure(plik)
-                permitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]])
-                wordpos.remove(wordpos[0])
-                while True:
-                        if wordpos==[]:
-                                break
-                        newpermitted=dictionary.permittedWords(star,99-start+wordpos[0],word[wordpos[0]])
-                        if newpermitted==[]:
-                                break
-                        newnewpermitted==[]
-                        for i in range(0,len(permitted)):
-                                for j in range(0,len(newpermitted)):
-                                        if permitted[i]==newpermitted[j]:
-                                                newnewpermitted.append(permitted[i])
-                        permitted=newnewpermitted
-                        if permitted==[]:
-                                break
-                        wordpos.remove(wordpos[0])
-                        
-                if wordpos==[]:#jest super
-                        while True:
-                                slownik=open(filename,'r')
-                                a=-1
-                                for linijka in slownik:
-                                        a+=1
-                                        if a==permitted[i]:
-                                                if len(word)==len(linijka)-2:
-                                                        return linijka[2:]
-
-                if newpermitted==[]:
-                        pass#tej literki w ogole nie ma w pliku na tej pozycji
-                if permitted==[]:
-                        pass#ta literka jest w pliku ale nie pasuje do wczesniej wybranych
-
-##        else:
-##            #robi wspaniala strukture drzewiasta
-##            word=dictionaryObject.normalize(tupleListList) #normalizuje
-##            wordpos=dictionaryObject.bestPos(word) #obliczam pozycje
-##            plik=dictionaryObject.loadFiles(wordpos) #wybieram i laduje pliki
-##            stars=dictionaryObject.createDataStructure(plik) #tworze SS z pliku
-##            #dictionaryObject.StarStruct.has(wordpos)
-##            #costam dalej
-##            return checkword'''
 
 if __name__ == "__main__":
 	a=Control()
