@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 """Interface module enables communication beetwen user and program"""
 import sys
 import wx
@@ -304,13 +304,17 @@ class MyFrame(wx.Frame):
         interface.saveOptions()
 
     def OnRecog(self,e):
-        dialog = wx.ProgressDialog("Progress", "Please, wait a while...", style = wx.PD_ELAPSED_TIME)
+        maxValue=1
+        dialog = wx.ProgressDialog("Recognition", "Please wait...", maxValue, style = wx.PD_ELAPSED_TIME|wx.PD_APP_MODAL|wx.PD_SMOOTH)
         try:
             self.text=interface.textRecognition(self.picture)
         except IOError, details:
             print "Error:", details
+        value=1
+        dialog.Update(value,"Done")
         self.text_ctrl.Destroy()
-        self.text_ctrl = wx.TextCtrl(self, 1, self.text, style=wx.TE_MULTILINE)
+        self.text_ctrl = wx.TextCtrl(self, -1, self.text, style=wx.TE_MULTILINE)
+        self.__set_properties()
         self.__do_layout(self.bitmap)
         dialog.Destroy()
 
