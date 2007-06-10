@@ -4,10 +4,12 @@ from blockframe import *
 from lineframe import *
 from charframe import *
 from dictionary import *
+from neuralnetwork import *
 from glob import glob
 
 class Control:
-        """Control class determines data flow and sets options for inner functions; contains methods that uses other program classes."""
+        """Control class determines data flow and sets options for inner functions; contains methods that uses other program classes.
+        There's no instance of this class in program. Instead of that, it is inheritated to GUI and CommandLine classes in Interface module."""
         def __init__(self):
                 """Class constructor; assigns atributes: self.options (list of options read from file) and self.dictionaries (list of available dictionaries)."""
                 optionFile=open('options.ini','r')
@@ -30,7 +32,7 @@ class Control:
                 picture=open(filename,'rb')
                 return picture
         def textRecognition(self,pic):
-                """Main class method; uses methods below to cut picture file to lines and to characters, and to recognize characters."""
+                """Main class method; uses methods below to cut picture file to lines and to characters, and to recognize characters; also composites whole text after recognition."""
                 text=""
                 mainList=self.blockSegmentation(pic,[self.options[1],self.options[2],self.options[3]])
                 dictionaryObject=Dictionary(self.options[0])
@@ -43,7 +45,7 @@ class Control:
                         text+='\n'
                 return text
         def blockSegmentation(self,picture,listOfOptions=[]):
-                """Segmentation of a block of text into list of lines given as LineFrame objects."""
+                """Segmentation of a block of text into list of lines given as instance of LineFrame class."""
                 block=BlockFrame(picture)
                 if listOfOptions[2]=='poor':
                 
@@ -56,11 +58,11 @@ class Control:
                 lines=block.extractLines()
                 return lines
         def characterSegmentation(self,LineFrame,listOfOptions):
-                """Segmentation of text line, returns list of lists of CharFrame objects."""
+                """Segmentation of text line, returns list of lists of instances of CharFrame class. Elements of outer list are words, which are lists of charakters."""
                 characters = LineFrame.extractCharacters()
                 return characters
         def characterRecognition (self,CharFrame,listOfOptions):
-                """Recognition of single character given as an CharFrame object; returns a string."""
+                """Recognition of single character using implementation of neural network. Returns list of tuples, where single tuple is a pair: a letter and probability of it's appearance."""
                 return [('a',23),('b',11),('c',8)]
         def textComposition(self,tupleListList,dictionaryObject):
                 """Searches for a recognized word in a dictionary and returns a word which suits the recognized one most, or optionally composes one from letters with biggest probability of appearance"""
