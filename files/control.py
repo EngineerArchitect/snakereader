@@ -23,7 +23,6 @@ class Control:
                 optionFile=open('options.ini','w')
                 for i in range(len(optionList)):
                         optionList[i]=optionList[i][:optionList[i].index('=')+1]+str(self.options[i])+'\n'
-                print optionList
                 optionFile.writelines(optionList)
                 optionFile.close()
         def inputFile(self,filename):

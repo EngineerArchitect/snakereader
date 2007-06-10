@@ -10,7 +10,7 @@ from control import *
 class GUI(Control) :
     """Grafical interface"""
     def showInterface(self) :
-        """Opens grafical interface (an object wx.Frame class)"""
+        """Opens grafical interface (an object from wx.Frame class)"""
         app = wx.PySimpleApp(0)
         wx.InitAllImageHandlers()
         Snakereader = MyFrame(None, -1, "")
@@ -33,7 +33,6 @@ class CommandLine(Control) :
 
 #-----------------GUI----------------#
 
-optionList = ["a.txt", "b.txt", "c.txt"]
 ID_OPEN = 11
 ID_SAVE = 12
 ID_EXIT = 13
@@ -41,6 +40,9 @@ ID_EXIT = 13
 ID_OPT = 21
 ID_DEF = 22
 ID_SAVE_O = 23
+
+ID_O_OK = 211
+ID_O_CA = 212
 
 ID_RECOG = 31
 
@@ -59,26 +61,25 @@ class Options(wx.Frame):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.label_4 = wx.StaticText(self, -1, "")
-        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=optionList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=dicList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.radio_box_2 = wx.RadioBox(self, -1, "Choose quality", choices=["good","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
         self.label_5 = wx.StaticText(self, 5, "Technical data:")
         self.label_6 = wx.StaticText(self, -1, "Font size   ")
-        self.text_ctrl_3 = wx.TextCtrl(self, -1, "")
+        self.text_ctrl_3 = wx.TextCtrl(self, -1, interface.options[1])
         self.label_7 = wx.StaticText(self, -1, "Scan resolution   ")
-        self.text_ctrl_4 = wx.TextCtrl(self, -1, "")
+        self.text_ctrl_4 = wx.TextCtrl(self, -1, interface.options[2])
         self.static_line_2 = wx.StaticLine(self, -1)
-        self.button_1 = wx.Button(self, 5, "OK")
-        self.button_2 = wx.Button(self, 5, "Cancel")
-        
-        self.Bind(wx.EVT_BUTTON, self.OnOK)
-        self.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.button_1 = wx.Button(self, ID_O_OK, "OK")
+        self.button_2 = wx.Button(self, ID_O_CA, "Cancel")
+        wx.EVT_BUTTON(self.button_1, ID_O_OK, self.OnOK)
+        wx.EVT_BUTTON(self.button_2, ID_O_CA, self.OnCancel)
         self.__set_properties()
         self.__do_layout()
         
         # end wxGlade
         
-    def OnOK(self, e = None):
+    def OnOK(self, e):
         interface.options[0] = interface.dictionaries[self.radio_box_1.GetSelection()]
         interface.options[1] = self.text_ctrl_3.GetValue()
         interface.options[2] = self.text_ctrl_4.GetValue()
@@ -86,10 +87,9 @@ class Options(wx.Frame):
             interface.options[3] = "good"
         else:
             interface.options[3] = "poor"
-        print interface.options
         self.Close(True)
 
-    def OnCancel(self, e = None):
+    def OnCancel(self, e):
         self.Close(True)
         
     def __set_properties(self):
@@ -98,8 +98,11 @@ class Options(wx.Frame):
         self.SetSize((300, 400))
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
-        self.radio_box_1.SetSelection(0)
-        self.radio_box_2.SetSelection(0)
+        self.radio_box_1.SetSelection(interface.dictionaries.index(interface.options[0]))
+        if interface.options[3]=="good":
+            self.radio_box_2.SetSelection(0)
+        else:
+            self.radio_box_2.SetSelection(1)
         # end wxGlade
 
     def __do_layout(self):
