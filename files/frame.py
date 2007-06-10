@@ -5,7 +5,13 @@ from PIL import Image #musiałem dodać bo mi się nie włącza Lisu
 #import math
 
 class Frame :
-    """Class docstring"""
+    """
+        Class Frame is a virtual class having all the methods and functions,
+        which are needed for
+        processing text images in general, no matter if it is a block, line or
+        single character. Inheriting classes (BlockFrame, LineFrame and
+        CharFrame) use them for teir own purposes.
+        """
     
     def __init__(self,f=None,new=False) :
             if new:
@@ -13,18 +19,12 @@ class Frame :
             else:
                 self.matrix=Image.open(f)
             pass
-    def putPixel (self, x, y) :
-            """Method sets the pixel colour to black (for single-band images)"""
-            self.matrix.putpixel((x,y),0)
-
-    def getPixel (self, x, y) :
-            """Method returns integer for single-band images (255:white, 0:black) and n-tuple for n-band images"""
-            value = self.matrix.getpixel((x,y))
-            return value
+   
 
     def rotate (self,angle) :
-            """Rotates an image by an angle"""
+            """Rotates an image by an angle counter clockwise"""
             self.matrix=self.matrix.rotate(angle, expand=True)
+            return self
             pass
 
     def blackWhite (self, quality='ok') :
@@ -49,6 +49,15 @@ class Frame :
                 self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
 
             self.matrix=self.matrix.convert('1')
+
+     def putPixel (self, x, y) :
+            """Method sets the pixel colour to black (for single-band images)"""
+            self.matrix.putpixel((x,y),0)
+
+    def getPixel (self, x, y) :
+            """Method returns integer for single-band images (255:white, 0:black) and n-tuple for n-band images"""
+            value = self.matrix.getpixel((x,y))
+            return value
 
     def hLineHistogram (self, number) :
             """Returns the sum of black pixels in the horizontal line of particular number"""
@@ -232,19 +241,20 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("l1.jpg",'rb')
+    f=open("a.bmp",'rb')
     im=Frame(f)
     im.blackWhite()
 ##    print list(im.matrix.getdata())
 ##    im.clear()
 ##    im.showPicture()
 ##    im.clear()
-    im.clear()
+    
 ####    print im.getSize()
 ####    im=im.upperCut()
 ##    im=im.vCut()
 ####    print im.getSize()
 ##    im.rotate(45)
+    im.rotate(45)
     im.showPicture()
     pass
 ##    im=Frame(new=True)
