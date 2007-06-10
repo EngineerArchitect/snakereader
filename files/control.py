@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-"""Module is controling data flow in program using Control class"""
+"""Module is controling data flow in program using Control class. It is separated from Interface module for making it more universal and evolutionable."""
 from blockframe import *
 from lineframe import *
 from charframe import *
