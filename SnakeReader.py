@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-"""Interface module, it enables communication beetwen user and program"""
+"""Interface module enables communication beetwen user and program"""
 import sys
 import wx
 import os
@@ -18,7 +18,7 @@ class GUI(Control) :
         Snakereader.Show()
         app.MainLoop()
 class CommandLine(Control) :
-    """Program starts from command line"""
+    """activates when program starts from command line"""
     def readCommandLine(self) :
         """Reads and changes options"""
         for i in range (0, len(sys.argv)):
@@ -33,6 +33,7 @@ class CommandLine(Control) :
 
 #-----------------GUI----------------#
 
+optionList = ["a.txt", "b.txt", "c.txt"]
 ID_OPEN = 11
 ID_SAVE = 12
 ID_EXIT = 13
@@ -58,17 +59,20 @@ class Options(wx.Frame):
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.label_4 = wx.StaticText(self, -1, "")
-        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=dicList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=optionList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.radio_box_2 = wx.RadioBox(self, -1, "Choose quality", choices=["good","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
-        self.label_5 = wx.StaticText(self, -1, "Technical data:")
+        self.label_5 = wx.StaticText(self, 5, "Technical data:")
         self.label_6 = wx.StaticText(self, -1, "Font size   ")
         self.text_ctrl_3 = wx.TextCtrl(self, -1, "")
         self.label_7 = wx.StaticText(self, -1, "Scan resolution   ")
         self.text_ctrl_4 = wx.TextCtrl(self, -1, "")
         self.static_line_2 = wx.StaticLine(self, -1)
-        self.button_1 = wx.Button(self, -1, "OK")
+        self.button_1 = wx.Button(self, 5, "OK")
+        self.button_2 = wx.Button(self, 5, "Cancel")
+        
         self.Bind(wx.EVT_BUTTON, self.OnOK)
+        self.Bind(wx.EVT_BUTTON, self.OnCancel)
         self.__set_properties()
         self.__do_layout()
         
@@ -82,6 +86,7 @@ class Options(wx.Frame):
             interface.options[3] = "good"
         else:
             interface.options[3] = "poor"
+        print interface.options
         self.Close(True)
 
     def OnCancel(self, e = None):
@@ -90,17 +95,18 @@ class Options(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Options")
-        self.SetSize((300, 264))
+        self.SetSize((300, 400))
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
         self.radio_box_1.SetSelection(0)
-        self.radio_box_1.SetSelection(0)
+        self.radio_box_2.SetSelection(0)
         # end wxGlade
 
     def __do_layout(self):
         # begin wxGlade: MyFrame.__do_layout
         sizer_1 = wx.BoxSizer(wx.VERTICAL)
         sizer_10 = wx.BoxSizer(wx.VERTICAL)
+        sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_13 = wx.BoxSizer(wx.VERTICAL)
         sizer_14 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_15 = wx.BoxSizer(wx.VERTICAL)
@@ -108,10 +114,10 @@ class Options(wx.Frame):
         sizer_11 = wx.BoxSizer(wx.VERTICAL)
         sizer_12 = wx.BoxSizer(wx.HORIZONTAL)
         sizer_11.Add(self.label_4, 0, 0, 0)
-        sizer_12.Add(self.radio_box_1, 0, wx.SHAPED, 0)
-        sizer_11.Add(sizer_12, 0, wx.EXPAND, 0)
-        sizer_11.Add(self.radio_box_2, 0, wx.SHAPED, 0)
-        sizer_11.Add(self.static_line_1, 2, wx.EXPAND, 0)
+        sizer_12.Add(self.radio_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
+        sizer_12.Add(self.radio_box_2, 0, 0, 0)
+        sizer_11.Add(sizer_12, 200, wx.EXPAND, 0)
+        sizer_11.Add(self.static_line_1, 0, wx.EXPAND, 0)
         sizer_10.Add(sizer_11, 3, wx.EXPAND, 0)
         sizer_13.Add(self.label_5, 0, 0, 0)
         grid_sizer_1.Add(self.label_6, 0, wx.ALIGN_RIGHT, 0)
@@ -123,7 +129,9 @@ class Options(wx.Frame):
         sizer_13.Add(sizer_14, 1, wx.EXPAND, 0)
         sizer_13.Add(self.static_line_2, 0, wx.EXPAND, 0)
         sizer_10.Add(sizer_13, 1, wx.EXPAND, 0)
-        sizer_10.Add(self.button_1, 0, wx.ALIGN_RIGHT, 0)
+        sizer_2.Add(self.button_2, wx.ALIGN_RIGHT, 5, 0)
+        sizer_2.Add(self.button_1, wx.ALIGN_RIGHT, 5, 0)
+        sizer_10.Add(sizer_2, 1, wx.EXPAND, 0)
         sizer_1.Add(sizer_10, 1, wx.EXPAND, 0)
         self.SetSizer(sizer_1)
         self.Layout()
@@ -135,6 +143,17 @@ class MyScroll(wx.ScrolledWindow):
     def __init__(self, parent, id = -1, size = 356, bitmap=None):
         wx.ScrolledWindow.__init__(self, parent, id, wx.Point(0, 0), (350,700), wx.SUNKEN_BORDER)
         if bitmap!=None:
+            """self.bitmap_2 = wx.Image((bitmap), wx.BITMAP_TYPE_ANY)
+            W = self.bitmap_2.GetWidth()
+            H = self.bitmap_2.GetHeight()
+            if (W/H > 350/700):
+                NewW = 350
+                NewH = 350 * H / W
+            else:
+                NewH = 700
+                NewW = 700 * W / H
+            self.bitmap_2 = self.bitmap_2.Scale(NewW,NewH)
+            bitmap = self.bitmap_2"""
             self.buffer=wx.Bitmap(bitmap)
         else:
             self.buffer=wx.EmptyBitmap(350,700)
@@ -323,10 +342,10 @@ class MyFrame(wx.Frame):
         _icon = wx.EmptyIcon()
         _icon.CopyFromBitmap(wx.Bitmap(".//files//Snake.bmp", wx.BITMAP_TYPE_ANY))
         self.SetIcon(_icon)
-        self.SetSize((901, 581))
+        self.SetSize((1031, 581))
         self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
-        self.text_ctrl.SetMinSize((100, 100))
+        self.text_ctrl.SetMinSize((675, 488))
         # end wxGlade
 
     def __do_layout(self, bitmap):
