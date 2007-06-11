@@ -379,10 +379,10 @@ class MyFrame(wx.Frame):
 
 #-----------------INTERFACE----------------#
                 
-#sys.argv.append('l1.jpg')
-#sys.argv.append('a.txt')
-#sys.argv.append('-q')
-#sys.argv.append('poor')
+sys.argv.append('Uczzerowke2.jpg')
+sys.argv.append('a.txt')
+sys.argv.append('-q')
+sys.argv.append('poor')
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()
