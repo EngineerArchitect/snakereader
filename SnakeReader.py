@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-"""Interface module enables communication beetwen user and program"""
+# -*- coding: utf8 -*-
+"""Snake Reader is Optical Character Recognition program fully written in Python by students of Wrocław University of Technology (Computer Science). Program uses neural network in recognition stage and optional dictionary checking later. It has it's own GUI but can also be used by a command line (as a plugin).\n
+Interface module enables communication beetwen user and program. After program start an object from GUI class are created. When in command line something more than the name of program is (name of input, output file and options), the CommandLine cless object are created"""
 import sys
 import wx
 import os
@@ -8,7 +9,7 @@ sys.path.append(sys.path[0]+"/files")
 
 from control import *
 class GUI(Control) :
-    """Grafical interface"""
+    """Grafical interface class inherit from Control class. In GUI is another method: showInterface"""
     def showInterface(self) :
         """Opens grafical interface (an object from wx.Frame class)"""
         app = wx.PySimpleApp(0)
@@ -18,7 +19,7 @@ class GUI(Control) :
         Snakereader.Show()
         app.MainLoop()
 class CommandLine(Control) :
-    """activates when program starts from command line"""
+    """Activates when program starts from command line. CommandLine class inherit from Control class. In CommandLine is another method: readCommandLine"""
     def readCommandLine(self) :
         """Reads and changes options"""
         for i in range (0, len(sys.argv)):
@@ -56,13 +57,15 @@ ID_SAVE_B = 53
 ID_OPT_B = 54
 
 class Options(wx.Frame):
+    """Opens window with options. User can make changes: choose a dictionary, choose quality of dictionary verification and give some helpful technical data: Font size, Scan resolution"""
     def __init__(self, dicList, *args, **kwds):
+        """Class costructor. There all elements (buttons, radioboxes, lines, etc.)are created"""
         # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
         self.label_4 = wx.StaticText(self, -1, "")
         self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=dicList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
-        self.radio_box_2 = wx.RadioBox(self, -1, "Choose quality", choices=["good","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_2 = wx.RadioBox(self, -1, "Choose quality", choices=["ok","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
         self.label_5 = wx.StaticText(self, 5, "Technical data:")
         self.label_6 = wx.StaticText(self, -1, "Font size   ")
@@ -80,16 +83,18 @@ class Options(wx.Frame):
         # end wxGlade
         
     def OnOK(self, e):
+        """Approves all changes"""
         interface.options[0] = interface.dictionaries[self.radio_box_1.GetSelection()]
         interface.options[1] = self.text_ctrl_3.GetValue()
         interface.options[2] = self.text_ctrl_4.GetValue()
         if self.radio_box_2.GetSelection()==0:
-            interface.options[3] = "good"
+            interface.options[3] = "ok"
         else:
             interface.options[3] = "poor"
         self.Close(True)
 
     def OnCancel(self, e):
+        """Annuls all changes"""
         self.Close(True)
         
     def __set_properties(self):
@@ -99,7 +104,7 @@ class Options(wx.Frame):
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
         self.radio_box_1.SetSelection(interface.dictionaries.index(interface.options[0]))
-        if interface.options[3]=="good":
+        if interface.options[3]=="ok":
             self.radio_box_2.SetSelection(0)
         else:
             self.radio_box_2.SetSelection(1)
@@ -143,7 +148,9 @@ class Options(wx.Frame):
 # end of class Options
 
 class MyScroll(wx.ScrolledWindow):
+    """A place for a preview of input file"""
     def __init__(self, parent, id = -1, size = 356, bitmap=None):
+        """Class costructor."""
         wx.ScrolledWindow.__init__(self, parent, id, wx.Point(0, 0), (350,700), wx.SUNKEN_BORDER)
         if bitmap!=None:
             """self.bitmap_2 = wx.Image((bitmap), wx.BITMAP_TYPE_ANY)
@@ -165,12 +172,15 @@ class MyScroll(wx.ScrolledWindow):
         wx.EVT_PAINT(self,self.OnPaint)
         
     def OnPaint(self,event):
+        """Draw input bitmap or jpg on screen"""
         dc = wx.BufferedPaintDC(self,self.buffer)
 
 # end of class MyScroll
 
 class MyFrame(wx.Frame):
+    """Main window"""
     def __init__(self, *args, **kwds):
+        """Class costructor. MenuBar, ToolBar, place for bitmap prwview and final text are created there"""
         # begin wxGlade: MyFrame.__init__
         kwds["style"] = wx.DEFAULT_FRAME_STYLE
         wx.Frame.__init__(self, *args, **kwds)
@@ -242,7 +252,7 @@ class MyFrame(wx.Frame):
 
 
     def OnOpen(self,e):
-        """ Open a file"""
+        """Read in input file, and creates MyScroll class object to display a preview"""
         self.dirname = ''
         dialog = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.OPEN)
         if dialog.ShowModal() == wx.ID_OK:
@@ -281,6 +291,7 @@ class MyFrame(wx.Frame):
         dialog.Destroy()
 
     def OnSave(self,e):
+        """Save final text (or modyfied by user) in  indicated file """
         self.dirname = ''
         dialog = wx.FileDialog(self, "Choose a file", self.dirname, "", "*.*", wx.SAVE)
         if dialog.ShowModal() == wx.ID_OK:
@@ -291,19 +302,24 @@ class MyFrame(wx.Frame):
             outputFile.close()
 
     def OnExit(self,e):
+        """Close main window"""
         self.Close(True)
     
     def OnOpt(self,e):
+        """Creates an optionsWindow - Options class object"""
         optionsWindow=Options(interface.dictionaries, None)
         optionsWindow.Show()
 
     def OnDef(self,e):
+        """Set default options (without dictionry veryfication, no data about font size and scan resolution)"""
         interface.options=['None','','',"poor"]
 
     def OnSaveO(self,e):
+        """Save current (seted by user) options in file"""
         interface.saveOptions()
 
     def OnRecog(self,e):
+        """Sets program working"""
         maxValue=1
         dialog = wx.ProgressDialog("Recognition", "Please wait...", maxValue, style = wx.PD_ELAPSED_TIME|wx.PD_APP_MODAL|wx.PD_SMOOTH)
         try:
@@ -321,6 +337,7 @@ class MyFrame(wx.Frame):
     #def OnDocum(self,e):
     
     def OnRequir(self,e):
+        """Shows message dialog with requirements to input data"""
         dialog = wx.MessageDialog(self, "INPUT DATA:\n"
                                   "text document as a picture (bmp or jpg format):\n"
                                   "\t - polish language,\n"
@@ -336,6 +353,7 @@ class MyFrame(wx.Frame):
 
         
     def OnAbout(self,e):
+        """Shows message dialog with informations abaut program"""
         dialog = wx.MessageDialog(self, "Snakereader is an Open Source project \n"
                                   "created by students of Wroclaw University of Technology \n\n"
                                   "Wroclaw, 2007","About", wx.OK)
@@ -349,7 +367,7 @@ class MyFrame(wx.Frame):
         _icon = wx.EmptyIcon()
         _icon.CopyFromBitmap(wx.Bitmap(".//files//Snake.bmp", wx.BITMAP_TYPE_ANY))
         self.SetIcon(_icon)
-        self.SetSize((1031, 581))
+        self.SetSize((1000, 581))
         self.Snakereader_toolbar.SetToolBitmapSize((30, 30))
         self.Snakereader_toolbar.Realize()
         self.text_ctrl.SetMinSize((675, 488))
@@ -379,10 +397,10 @@ class MyFrame(wx.Frame):
 
 #-----------------INTERFACE----------------#
                 
-sys.argv.append('Uczzerowke2.jpg')
-sys.argv.append('a.txt')
-sys.argv.append('-q')
-sys.argv.append('poor')
+#sys.argv.append('l1.jpg')
+#sys.argv.append('a.txt')
+#sys.argv.append('-q')
+#sys.argv.append('poor')
 if len(sys.argv)>1:
     commandLine=CommandLine()
     commandLine.readCommandLine()
