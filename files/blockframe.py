@@ -6,9 +6,9 @@ import numpy
 from frame import Frame
 from lineframe import LineFrame
 class BlockFrame(Frame) :
-     """class docstring"""
-##     def __init__(self) :#init może zniknąć
-##          pass
+     """This is a real class, which operates on images containing solid block
+          of text"""
+
      def findLevel (self) :
           """Finds the skew of the text"""
           a=list(self.matrix.getdata())
@@ -57,16 +57,16 @@ class BlockFrame(Frame) :
                else:
                     break
           return cutpoint
+     
      def extractLines(self):
           """returns a list of all lines in the text"""
           lines=[]
-          i=0
+          
           while self.matrix.size[1]!=0:
                a=self.extractLine()
                if a.matrix.size[1]>10:
                     lines.append(a)
-                    a.matrix.save(str(i)+'.BMP')
-                    i+=1
+                    
 ##               print self.matrix.size[1]
           return lines
           pass
@@ -86,18 +86,3 @@ if __name__ == "__main__":
      l=im.extractLines()
      
      
-##     a=im.matrix.tobitmap()
-##     
-     
-##     x=Image.fromstring('1',(896,253),a)
-##     x.show()
-##     print a[2398]
-####     im.clear()
-##     l=im.extractLines()
-
-######     
-####        
-##     im.showPicture()
-##     im.upperCut()
-##for i in range (50):
-##     print im.findCutpoint(i)

@@ -33,26 +33,20 @@ class Frame :
                 import ImageEnhance
                 self.matrix = ImageEnhance.Contrast(self.matrix)
                 self.matrix = self.matrix.enhance(2.5)
-##
-##            enhancer = ImageEnhance.Contrast(self.matrix)
-##
-##            for i in range(8):
-##                factor = i / 4.0
-##                enhancer.enhance(factor).convert('1').show("Contrast %f" % factor)
-##           self.matrix=self.matrix.point(lambda i: 122.5*(math.tanh(2*i-256)+1))
-            
-##            self.matrix=self.matrix.point(lambda i:  i+50)
-
-##            
+       
             if quality=='poor':
                 from PIL import ImageFilter #Lisu
                 self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
 
             self.matrix=self.matrix.convert('1')
 
-     def putPixel (self, x, y) :
+    def putPixel (self, x, y) :
             """Method sets the pixel colour to black (for single-band images)"""
             self.matrix.putpixel((x,y),0)
+
+    def makeWhite(self, x, y) :
+            """Method sets the pixel colour to white (for single-band images)"""
+            self.matrix.putpixel((x,y),255)
 
     def getPixel (self, x, y) :
             """Method returns integer for single-band images (255:white, 0:black) and n-tuple for n-band images"""
@@ -151,8 +145,9 @@ class Frame :
     def leftCut(self) :
         """Cuts the image from the left to the beginning of text"""
         l_cutpoint=0
+        treshold=0.005*self.matrix.size[1]
         for i in range(self.matrix.size[0]-1):
-                if self.vLineHistogram(i) >= 2: #0.001*self.matrix.size[1]:
+                if self.vLineHistogram(i) >= treshold:
                     l_cutpoint = i
                     break
         self.matrix=self.matrix.crop((l_cutpoint,0,self.matrix.size[0],self.matrix.size[1]))
@@ -171,8 +166,9 @@ class Frame :
     def upperCut (self) :
             """Cuts the image from the upper side to the beginning of text"""
             u_cutpoint=0
+            treshold=0.005*self.matrix.size[0]
             for i in range(self.matrix.size[1]-1):
-                if self.hLineHistogram(i) >= 2: #0.01*self.matrix.size[0]:
+                if self.hLineHistogram(i) >= treshold:
                     u_cutpoint = i
                     break
             self.matrix=self.matrix.crop((0,u_cutpoint,self.matrix.size[0],self.matrix.size[1]))
@@ -224,8 +220,7 @@ class Frame :
         return self.matrix.size
         
 
-    def makeWhite(self, x, y) :
-        self.matrix.putpixel((x,y),255)
+    
 
         
 ##########        test methods            ##########
@@ -241,20 +236,20 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("a.bmp",'rb')
+    f=open("learn1.jpg",'rb')
     im=Frame(f)
     im.blackWhite()
 ##    print list(im.matrix.getdata())
 ##    im.clear()
 ##    im.showPicture()
-##    im.clear()
+    im.clear()
     
 ####    print im.getSize()
-####    im=im.upperCut()
-##    im=im.vCut()
+    im=im.hCut()
+    im=im.vCut()
 ####    print im.getSize()
 ##    im.rotate(45)
-    im.rotate(45)
+##    im.rotate(45)
     im.showPicture()
     pass
 ##    im=Frame(new=True)
