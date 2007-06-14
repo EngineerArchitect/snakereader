@@ -63,7 +63,7 @@ class LineFrame(Frame) :
             return position, "Space", 0
         else:
             for i in range(0,high): ##extracting all black pixels from this line
-                if self.getPixel(position, i)==0:
+                if self.getPixel(position, i)<128:
                     Queue.append((position, i))
                     PiksList.append((position, i))
 
