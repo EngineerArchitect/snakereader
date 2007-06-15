@@ -27,7 +27,7 @@ class Dictionary :
 		return word
 			
 	def loadFiles (self, filenames) :
-		"""This method loads necessary files so they will be faster used in the rest of the program. (not implemented yet)"""
+		"""This method loads necessary files so they will be faster used in the rest of the program."""
 		filenames
 		pass
 
@@ -82,9 +82,74 @@ class Dictionary :
 			wyrazy=[]
 		return wyrazy
 
-	def has (self, word) :
-		"""Checks if the word exists in the star structure. (not implemented yet)"""
-		pass
+	def forbidden (word,wordpos,palki):
+		"""Checks if chosen file is availible (in size respect)"""
+		if ((wordpos[0]<wordpos[1]) and (
+			((word[wordpos[0]][0][0]=='n') and (word[wordpos[1]][0][0]=='i') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='i') and (word[wordpos[1]][0][0]=='e') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='n') and (word[wordpos[1]][0][0]=='e') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='o') and (word[wordpos[1]][0][0]=='w') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='a') and (word[wordpos[1]][0][0]=='i') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='w') and (word[wordpos[1]][0][0]=='a') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='a') and (word[wordpos[1]][0][0]=='n') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='o') and (word[wordpos[1]][0][0]=='a') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='e') and (word[wordpos[1]][0][0]=='o') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='c') and (word[wordpos[1]][0][0]=='h') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='c') and (word[wordpos[1]][0][0]=='z') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='m') and (word[wordpos[1]][0][0]=='i') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='r') and (word[wordpos[1]][0][0]=='z') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='r') and (word[wordpos[1]][0][0]=='o') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='i') and (word[wordpos[1]][0][0]=='a') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='z') and (word[wordpos[1]][0][0]=='a') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='a') and (word[wordpos[1]][0][0]=='ł') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='o') and (word[wordpos[1]][0][0]=='i') and (palki=='___')) or
+			((word[wordpos[0]][0][0]=='p') and (word[wordpos[1]][0][0]=='o') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='a') and (word[wordpos[1]][0][0]=='y') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='a') and (word[wordpos[1]][0][0]=='o') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='k') and (word[wordpos[1]][0][0]=='o') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='i') and (word[wordpos[1]][0][0]=='i') and (palki=='__')) or
+			((word[wordpos[0]][0][0]=='e') and (word[wordpos[1]][0][0]=='m') and (palki=='')) or                        
+			((word[wordpos[0]][0][0]=='c') and (word[wordpos[1]][0][0]=='i') and (palki=='')) or
+			((word[wordpos[0]][0][0]=='o') and (word[wordpos[1]][0][0]=='i') and (palki=='_')) or
+			((word[wordpos[0]][0][0]=='i') and (word[wordpos[1]][0][0]=='o') and (palki=='__')) or
+			((word[wordpos[0]][0][0]=='e') and (word[wordpos[1]][0][0]=='i') and (palki=='_'))
+			)) or ((wordpos[1]<wordpos[0]) and (
+			((word[wordpos[1]][0][0]=='n') and (word[wordpos[0]][0][0]=='i') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='i') and (word[wordpos[0]][0][0]=='e') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='n') and (word[wordpos[0]][0][0]=='e') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='o') and (word[wordpos[0]][0][0]=='w') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='a') and (word[wordpos[0]][0][0]=='i') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='w') and (word[wordpos[0]][0][0]=='a') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='a') and (word[wordpos[0]][0][0]=='n') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='o') and (word[wordpos[0]][0][0]=='a') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='e') and (word[wordpos[0]][0][0]=='o') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='c') and (word[wordpos[0]][0][0]=='h') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='c') and (word[wordpos[0]][0][0]=='z') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='m') and (word[wordpos[0]][0][0]=='i') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='r') and (word[wordpos[0]][0][0]=='z') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='r') and (word[wordpos[0]][0][0]=='o') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='i') and (word[wordpos[0]][0][0]=='a') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='z') and (word[wordpos[0]][0][0]=='a') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='a') and (word[wordpos[0]][0][0]=='ł') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='o') and (word[wordpos[0]][0][0]=='i') and (palki=='___')) or
+			((word[wordpos[1]][0][0]=='p') and (word[wordpos[0]][0][0]=='o') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='a') and (word[wordpos[0]][0][0]=='y') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='a') and (word[wordpos[0]][0][0]=='o') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='k') and (word[wordpos[0]][0][0]=='o') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='i') and (word[wordpos[0]][0][0]=='i') and (palki=='__')) or
+			((word[wordpos[1]][0][0]=='e') and (word[wordpos[0]][0][0]=='m') and (palki=='')) or                        
+			((word[wordpos[1]][0][0]=='c') and (word[wordpos[0]][0][0]=='i') and (palki=='')) or
+			((word[wordpos[1]][0][0]=='o') and (word[wordpos[0]][0][0]=='i') and (palki=='_')) or
+			((word[wordpos[1]][0][0]=='i') and (word[wordpos[0]][0][0]=='o') and (palki=='__')) or
+			((word[wordpos[1]][0][0]=='e') and (word[wordpos[0]][0][0]=='i') and (palki=='_'))
+			)) :
+			return True
+		else:
+			return False
+
+##	def has (self, word) :
+##		"""Checks if the word exists in the star structure. (not implemented yet)"""
+##		pass
 
 ##class StarStruct :
 ##        """class docstring"""
