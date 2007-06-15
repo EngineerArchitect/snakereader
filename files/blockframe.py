@@ -76,13 +76,18 @@ if __name__ == "__main__":
      #this runs, when code is running as an own program, not as a module
      
      
-     f=open("learn1.jpg",'rb')
+     f=open('uczzerowke1.jpg','rb')
      im=BlockFrame(f)
      im.blackWhite()
+     im.showPicture()
      im.clear()
      im.hCut()
      im.vCut()
      im.showPicture()
      l=im.extractLines()
+     name=0
+     for i in l:
+            i.savePicture(str(name)+'.bmp','bmp')
+            name+=1
      
      

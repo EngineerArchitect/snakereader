@@ -29,16 +29,17 @@ class Frame :
 
     def blackWhite (self, quality='ok') :
             """Converts an image to single-band binary image"""
+            self.matrix=self.matrix.convert('L')
             if quality=='ok':
                 import ImageEnhance
+                self.matrix=self.matrix.point(lambda i: i+20)
                 self.matrix = ImageEnhance.Contrast(self.matrix)
                 self.matrix = self.matrix.enhance(2.5)
-       
+                self.matrix=self.matrix.convert('1')   
             if quality=='poor':
                 from PIL import ImageFilter #Lisu
                 self.matrix = self.matrix.filter(ImageFilter.MinFilter(3))
-
-            self.matrix=self.matrix.convert('1')
+                self.matrix=self.matrix.convert('1')
 
     def putPixel (self, x, y) :
             """Method sets the pixel colour to black (for single-band images)"""
@@ -236,21 +237,28 @@ class Frame :
 
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
 	#you can use this section to test your module
-    f=open("learn1.jpg",'rb')
+    f=open("0.bmp",'rb')
     im=Frame(f)
+##    im.blackWhite('poor')
     im.blackWhite()
+    
 ##    print list(im.matrix.getdata())
 ##    im.clear()
 ##    im.showPicture()
-    im.clear()
-    
+##    im.clear()
+##    im.clear('poor')
 ####    print im.getSize()
     im=im.hCut()
     im=im.vCut()
 ####    print im.getSize()
 ##    im.rotate(45)
 ##    im.rotate(45)
-    im.showPicture()
+##    im.blackWhite()
+##    print im.vLinesHistogram()
+    for i in range(im.matrix.size[1]):
+        print im.getPixel(1,i)
+
+##    im.showPicture()
     pass
 ##    im=Frame(new=True)
 ##    im.showPicture()
