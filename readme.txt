@@ -9,9 +9,12 @@ An interaction with a program using a command line:
 [input file] a path to a .jpg or .bmp file, which will be recognized
 [output file] a place and file name, where the outcome text will be saved
 [options]:
-	-d (dictionary) name of dictionary file, which will be used during dictionary verification
+	-d (dictionary) option telling that program should use dictionary from cd (cd) or from internet server (server)
 	-s (size) font size from a scan
 	-r (resolution) scan resolution
+	-q (quality) scan quality (poor or ok)
+	-rq (recognition quality) quality of recognition (good or poor)
+	-p (parameters) file with parameters
 
-Egzample:
-C:\Documents and Settings\User\Pulpit>SnakeReader.py Scan.jpg Text.txt -d slo.txt -s 12 -r 300
+Example:
+C:\Documents and Settings\User\Pulpit>SnakeReader.py Scan.jpg Text.txt -d cd -s 12 -r 300 -q ok -rq good -p parameters.bin

@@ -5,7 +5,7 @@ import sys
 import wx
 import os
 
-sys.path.append(sys.path[0]+"/files")
+sys.path.append(sys.path[0]+"\\files")
 
 from control import *
 class GUI(Control) :
