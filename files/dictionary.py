@@ -1,5 +1,6 @@
 #-*- coding: utf8 -*-
 """Module is verifying neural network output with supported dictionary."""
+import urllib
 class Dictionary :
 	"""Overall class which is controlling dictionary and might be extended in any possible way in case of implementating other methods of veryfying word with dictionary."""
 #	def __init__(self):#,filename) :
@@ -212,16 +213,29 @@ if __name__ == "__main__": #this runs, when code is running as an own program, n
 		palki=palki+'_'
 	if wordpos[0]<wordpos[1]:
 		print word[wordpos[0]][0][0]+palki+word[wordpos[1]][0][0]
-		filenames.append("dict/slo/"+word[wordpos[0]][0][0]+palki+word[wordpos[1]][0][0]+".txt")
+		filenames.append("slo/"+word[wordpos[0]][0][0]+palki+word[wordpos[1]][0][0]+".txt")
 	else:
 		print word[wordpos[1]][0][0]+palki+word[wordpos[0]][0][0]
-		filenames.append("dict/slo/"+word[wordpos[1]][0][0]+palki+word[wordpos[0]][0][0]+".txt")
+		filenames.append("slo/"+word[wordpos[1]][0][0]+palki+word[wordpos[0]][0][0]+".txt")
 	#plik=dictionaryObject.loadFiles(filenames)
-	plik=filenames[0]
-	print "wordpos: "
-	print wordpos	
 
-	star=dictionaryObject.createDataStructure(plik)
+
+	try:
+		plik=filenames[0]
+		star=dictionaryObject.createDataStructure(plik)
+	except IOError:
+		sock=urllib.urlopen("http://87.99.41.41/"+filenames[0])
+		text=sock.read()
+		sock.close()
+		plik=file(filenames[0],"w")
+		plik.write(text)
+		plik.close()
+		plik=filenames[0]
+		star=dictionaryObject.createDataStructure(plik)
+	
+	
+
+
 	if wordpos[0]<wordpos[1]:
 		permitted=dictionaryObject.permittedWords(star,99,word[wordpos[0]][0][0])
 		start=wordpos[0]
