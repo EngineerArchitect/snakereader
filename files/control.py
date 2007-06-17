@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+#-*- coding: utf8 -*-
 """Module is controling data flow in program using Control class. It is separated from Interface module for making it more universal and evolutionable."""
 from blockframe import *
 from lineframe import *
@@ -6,6 +6,7 @@ from charframe import *
 from dictionary import *
 from neuralnetwork import *
 from glob import glob
+import urllib
 
 class Control:
 	"""Control class determines data flow and sets options for inner functions; contains methods that uses other program classes.
@@ -91,12 +92,24 @@ class Control:
 					palki=palki+'_'
 
 		if wordpos[0]<wordpos[1]:
-			filenames.append("dict/slo/"+word[wordpos[0]][0][0]+palki+word[wordpos[1]][0][0]+".txt")
+			filenames.append("slo/"+word[wordpos[0]][0][0]+palki+word[wordpos[1]][0][0]+".txt")
 		else:
-			filenames.append("dict/slo/"+word[wordpos[1]][0][0]+palki+word[wordpos[0]][0][0]+".txt")
+			filenames.append("slo/"+word[wordpos[1]][0][0]+palki+word[wordpos[0]][0][0]+".txt")
 			plik=filenames[0]
 
-		star=dictionaryObject.createDataStructure(plik)
+		try:
+			plik=filenames[0]
+			star=dictionaryObject.createDataStructure(plik)
+		except IOError:
+			sock=urllib.urlopen("http://87.99.41.41/"+filenames[0])
+			text=sock.read()
+			sock.close()
+			plik=file(filenames[0],"w")
+			plik.write(text)
+			plik.close()
+			plik=filenames[0]
+			star=dictionaryObject.createDataStructure(plik)
+
 		if wordpos[0]<wordpos[1]:
 			permitted=dictionaryObject.permittedWords(star,99,word[wordpos[0]][0][0])
 			start=wordpos[0]
@@ -156,22 +169,22 @@ class Control:
 					permitted=newnewpermitted
 					wordpos.remove(wordpos[0])
 		if len(permitted)>1:
-                        i=-1
-                        for linijka in slownik:
-                                i+=1
-                                for j in range(0,len(permitted)):
-                                        if i==permitted[j]:
-                                                if len(word)==len(linijka)-2:
-                                                        wyraz=linijka[2:]
-                                                        break
-                if wyraz=='' and len(permitted)>1:
-                        i=-1
-                        for linijka in slownik:
-                                i+=1
-                                if i==permitted[0]:
-                                        wyraz=linijka[2:]
-                                        
-                return wyraz
+			i=-1
+			for linijka in slownik:
+				i+=1
+				for j in range(0,len(permitted)):
+					if i==permitted[j]:
+						if len(word)==len(linijka)-2:
+							wyraz=linijka[2:]
+							break
+		if wyraz=='' and len(permitted)>1:
+			i=-1
+			for linijka in slownik:
+				i+=1
+				if i==permitted[0]:
+					wyraz=linijka[2:]
+					
+		return wyraz
 
 
 if __name__ == "__main__":
