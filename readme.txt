@@ -1,5 +1,5 @@
 Snake Reader is Optical Character Recognition program fully written in Python by students of Wroc³aw University of Technology (Computer Science). Program uses neural network in recognition stage and optional dictionary checking later. It has it's own GUI but can also be used by a command line (as a plugin).
-
+Due to some problems with Python, please run Snake Reader straight from SnakeReader.py file.
 
 
 An interaction with a program using a command line:
