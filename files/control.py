@@ -64,28 +64,9 @@ class Control:
 		return characters
 	def characterRecognition (self,CharFrame,listOfOptions):
 		"""Recognition of single character using implementation of neural network. Returns list of tuples, where single tuple is a pair: a letter and probability of it's appearance."""
-		listOfInputs=[]
-		for i1 in CharFrame.vLinesHistogram():
-		    listOfInputs.append(i1)
-		for i1 in CharFrame.hLinesHistogram():
-		    listOfInputs.append(i1)
-##                for i1 in range(30):
-##                    for i2 in range(30):
-##                        listOfInputs.append((float(CharFrame.getPixel(i1,i2)==255))/2.0)
-		neur=NeuralNetwork(60,100,60,[(n,n) for n in range(0,5)])
-		neur.loadFactors('learnHistogramXX.bin')
-		outputList=neur.getOutput(array(listOfInputs))
-		result=[]
-		stringi='aąbcćdeęfghijklłmnńoóprtsśtuvwxyzźżAĄBCĆDEĘFGHIJKLŁMNŃOÓPRSŚTUVWXYZŹŻ'
-		charList=list(stringi)+['_' for i in range(100)]
-		for i in range(len(outputList)):
-		    result.append((outputList[i],charList[i]))
-		result.sort()
-		result.reverse()
-		print result #uncomment this line to see the recognition process
-		return [(a[1],a[0]) for a in result]
+		return [(a[1],a[0]) for a in CharFrame.recognize()]
 	def textComposition(self,tupleListList,dictionaryObject):
-		"""Searches for a recognized word in a dictionary and returns a word which suits the recognized one most, or optionally composes one from letters with biggest probability of appearance"""
+		"""Searches for a recognized word in a dictionary and returns a word which suits the recognized one most, or optionally composes one from letters with highest probability of appearance"""
 		checkword=''
 		for i in range(0,len(tupleListList)):
 			checkword=checkword+tupleListList[i][0][0]

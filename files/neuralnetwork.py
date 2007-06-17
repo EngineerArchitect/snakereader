@@ -7,7 +7,7 @@ import math
 
 class NeuralNetwork :	
 	"""Neural network with learning based on backpropagation algorithm"""
-	def __init__(self,K,M,N,offList=[],alfamatrix='rnd',betamatrix='rnd',beta=0.05,eta=0.6):
+	def __init__(self,K,M,N,offList=[],alfamatrix='rnd',betamatrix='rnd',beta=0.01,eta=0.6):
 		"""Creates the neural network with the following parameters: K,M,N,  (optional:) offList,,alfamatrix,,betamatrix,beta,eta
 		K - number of inputs, M - number of neurons in the first layer; K - neurons in second layer, offList  - links that are eliminated from the web;
 		Optional parameters: alfamatrix - matrix (M x K) of factors of the first layer, in the columns there are factors of the particular neuron, if not given, will be randomly generated, you can also specify filename instead of this parameter (then you won't specify the betamatrix, because it also will be loaded); betamatrix - the same (N x M); beta - factor of the activation function (logistic function); eta is the step of learning""" 
@@ -56,7 +56,7 @@ class NeuralNetwork :
 		self.betamatrix=array([[self.betamatrix[m,n]+float(self.eta*delta[n]*self.Z[n]*(1-self.Z[n])*self.Y[m]) for n in range(self.N)] for m in range(self.M)])##changing the output layer factors
 		self.alfamatrix=array([[self.alfamatrix[k,m]+float(self.eta*epsilon[m]*self.Y[m]*(1-self.Y[m])*self.inputVector[k]) for m in range(self.M)] for k in range(self.K)])  ##the same for the first layer
 		for i,j in self.offList: self.betamatrix[i,j]=0
-		
+		#FIXME: has to return a value of difference between current output and expected one (in current metrics)
 ###########################################################33
 ##Testing part
 if __name__ == "__main__": #this runs, when code is running as an own program, not as a module
