@@ -31,6 +31,10 @@ class CommandLine(Control) :
                 self.options[2] = sys.argv[i+1]
             if sys.argv[i] == '-q':
                 self.options[3] = sys.argv[i+1]
+            if sys.argv[i] == '-rq':
+                self.options[4] = sys.argv[i+1]
+            if sys.argv[i] == '-p':
+                self.options[5] = sys.argv[i+1]
 
 #-----------------GUI----------------#
 
@@ -66,12 +70,15 @@ class Options(wx.Frame):
         self.label_4 = wx.StaticText(self, -1, "")
         self.radio_box_1 = wx.RadioBox(self, -1, "Choose a dictonary", choices=dicList, majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.radio_box_2 = wx.RadioBox(self, -1, "Choose quality", choices=["ok","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
+        self.radio_box_3 = wx.RadioBox(self, -1, "Choose recognition quality", choices=["good","poor"], majorDimension=0, style=wx.RA_SPECIFY_ROWS)
         self.static_line_1 = wx.StaticLine(self, -1)
         self.label_5 = wx.StaticText(self, 5, "Technical data:")
         self.label_6 = wx.StaticText(self, -1, "Font size   ")
         self.text_ctrl_3 = wx.TextCtrl(self, -1, interface.options[1])
         self.label_7 = wx.StaticText(self, -1, "Scan resolution   ")
         self.text_ctrl_4 = wx.TextCtrl(self, -1, interface.options[2])
+        self.label_8 = wx.StaticText(self, -1, "Parameters file   ")
+        self.text_ctrl_5 = wx.TextCtrl(self, -1, interface.options[5])
         self.static_line_2 = wx.StaticLine(self, -1)
         self.button_1 = wx.Button(self, ID_O_OK, "OK")
         self.button_2 = wx.Button(self, ID_O_CA, "Cancel")
@@ -87,10 +94,15 @@ class Options(wx.Frame):
         interface.options[0] = interface.dictionaries[self.radio_box_1.GetSelection()]
         interface.options[1] = self.text_ctrl_3.GetValue()
         interface.options[2] = self.text_ctrl_4.GetValue()
+        interface.options[5] = self.text_ctrl_5.GetValue()
         if self.radio_box_2.GetSelection()==0:
             interface.options[3] = "ok"
         else:
             interface.options[3] = "poor"
+        if self.radio_box_3.GetSelection()==0:
+            interface.options[4] = "1"
+        else:
+            interface.options[4] = "0"
         self.Close(True)
 
     def OnCancel(self, e):
@@ -100,7 +112,7 @@ class Options(wx.Frame):
     def __set_properties(self):
         # begin wxGlade: MyFrame.__set_properties
         self.SetTitle("Options")
-        self.SetSize((300, 400))
+        self.SetSize((400, 400))
         self.SetBackgroundColour(wx.Colour(236, 233, 216))
         self.SetForegroundColour(wx.Colour(0, 0, 0))
         self.radio_box_1.SetSelection(interface.dictionaries.index(interface.options[0]))
@@ -108,6 +120,10 @@ class Options(wx.Frame):
             self.radio_box_2.SetSelection(0)
         else:
             self.radio_box_2.SetSelection(1)
+        if interface.options[4]=="1":
+            self.radio_box_3.SetSelection(0)
+        else:
+            self.radio_box_3.SetSelection(1)
         # end wxGlade
 
     def __do_layout(self):
@@ -124,6 +140,7 @@ class Options(wx.Frame):
         sizer_11.Add(self.label_4, 0, 0, 0)
         sizer_12.Add(self.radio_box_1, 0, wx.ALIGN_CENTER_HORIZONTAL, 0)
         sizer_12.Add(self.radio_box_2, 0, 0, 0)
+        sizer_12.Add(self.radio_box_3, 0, 0, 0)
         sizer_11.Add(sizer_12, 200, wx.EXPAND, 0)
         sizer_11.Add(self.static_line_1, 0, wx.EXPAND, 0)
         sizer_10.Add(sizer_11, 3, wx.EXPAND, 0)
@@ -132,6 +149,8 @@ class Options(wx.Frame):
         grid_sizer_1.Add(self.text_ctrl_3, 0, 0, 0)
         grid_sizer_1.Add(self.label_7, 0, wx.ALIGN_RIGHT, 0)
         grid_sizer_1.Add(self.text_ctrl_4, 0, 0, 0)
+        grid_sizer_1.Add(self.label_8, 0, wx.ALIGN_RIGHT, 0)
+        grid_sizer_1.Add(self.text_ctrl_5, 0, 0, 0)
         sizer_15.Add(grid_sizer_1, 1, wx.EXPAND, 0)
         sizer_14.Add(sizer_15, 1, wx.EXPAND, 0)
         sizer_13.Add(sizer_14, 1, wx.EXPAND, 0)
@@ -312,7 +331,7 @@ class MyFrame(wx.Frame):
 
     def OnDef(self,e):
         """Set default options (without dictionry veryfication, no data about font size and scan resolution)"""
-        interface.options=['None','','',"poor"]
+        interface.options=['None','','','ok','1','parameters.bin']
 
     def OnSaveO(self,e):
         """Save current (seted by user) options in file"""
@@ -324,8 +343,9 @@ class MyFrame(wx.Frame):
         dialog = wx.ProgressDialog("Recognition", "Please wait...", maxValue, style = wx.PD_ELAPSED_TIME|wx.PD_APP_MODAL|wx.PD_SMOOTH)
         try:
             self.text=interface.textRecognition(self.picture)
-        except IOError, details:
+        except (IOError,AttributeError), details:
             print "Error:", details
+            dialog.Destroy()
         value=1
         dialog.Update(value,"Done")
         self.text_ctrl.Destroy()

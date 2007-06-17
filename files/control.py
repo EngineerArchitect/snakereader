@@ -40,7 +40,7 @@ class Control:
 			for word in self.characterSegmentation(line,[]):
 				wordRead=[]
 				for char in word:
-					wordRead.append(self.characterRecognition(char,[]))
+					wordRead.append(self.characterRecognition(char,[int(self.options[4]),self.options[5]]))
 				text+=self.textComposition(wordRead,dictionaryObject)+' '
 			text+='\n'
 		return text
@@ -173,21 +173,20 @@ class Control:
 					#print "normalka"
 					permitted=newnewpermitted
 					wordpos.remove(wordpos[0])
-
-                if len(permitted)>1:
+		if len(permitted)>1:
                         i=-1
                         for linijka in slownik:
                                 i+=1
                                 for j in range(0,len(permitted)):
-                                        if i=permitted[j]:
-                                                if len(word)=len(linijka)-2:
+                                        if i==permitted[j]:
+                                                if len(word)==len(linijka)-2:
                                                         wyraz=linijka[2:]
                                                         break
-                if wyraz='' and len(permitted)>1:
+                if wyraz=='' and len(permitted)>1:
                         i=-1
                         for linijka in slownik:
                                 i+=1
-                                if i=permitted[0]:
+                                if i==permitted[0]:
                                         wyraz=linijka[2:]
                                         
                 return wyraz
