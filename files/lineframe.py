@@ -38,9 +38,9 @@ class LineFrame(Frame) :
                     Word=[]
                 elif char == "Enter": ##Finden end of line, Wor list closed and appened to Line list, end of method, returned Line list
                     Line.append(Word)
-                    for i in range(0,len(Line)):
-                        for j in range(0, len(Line[i])):
-                            Line[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
+                    #for i in range(0,len(Line)):
+                        #for j in range(0, len(Line[i])):
+                            #Line[i][j].savePicture(str(i)+"kafel"+str(j)+".bmp","BMP")
                     return Line
             else: ## Character finden in line, append CharFrame object to Word list
                 Word.append(char)
