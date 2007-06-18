@@ -8,6 +8,8 @@ from numpy.oldnumeric  import * ##I am using matrix implementation
 
 class CharFrame(Frame) :
         """Class like class frame, but size is 30x30 and character recognition is added """
+        def __init__(self, x,y):
+            self.matrix = Image.new("1", (x,y), 255)
         def recognize (self) :
             """method uses neural layer to recognize character"""
             #FIXME: _very slow, it should be solved in a different way

@@ -18,7 +18,7 @@ class Control:
 		optionFile.close()
 		self.options=[opt[opt.index('=')+1:].strip() for opt in optionList]
 		#self.dictionaries=[dic[-7:-4] for dic in glob('.\\files\\dict\\*.txt')]+["None"]
-		self.dictionaries=['Cd','Web server','None']
+		self.dictionaries=['Web server','None']
 	def saveOptions(self):
 		"""Saves atribute self.options to options.ini file."""
 		optionFile=open('options.ini','r')
