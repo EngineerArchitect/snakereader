@@ -106,7 +106,7 @@ class Options(wx.Frame):
         self.Close(True)
 
     def OnCancel(self, e):
-        """Annuls all changes"""
+        """Cancels all changes"""
         self.Close(True)
         
     def __set_properties(self):
